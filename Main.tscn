@@ -1,15 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://ch1ga4cf763eo"]
+[gd_scene load_steps=5 format=3 uid="uid://ch1ga4cf763eo"]
 
 [ext_resource type="Script" path="res://Scripts/Main.gd" id="1_3ty82"]
 [ext_resource type="Texture2D" uid="uid://brxhe4wnb7jli" path="res://Sprites/Field.png" id="2_52mvt"]
 [ext_resource type="Texture2D" uid="uid://b1ard2jgvwmgk" path="res://Sprites/Blocks/BlockS.png" id="3_jfwma"]
-[ext_resource type="Script" path="res://Scripts/Figure.gd" id="3_v02qd"]
 [ext_resource type="Texture2D" uid="uid://cq3hevu4d2ss8" path="res://Sprites/Blocks/BlockZ.png" id="4_qt2jb"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_3ty82")
 
 [node name="GameTimer" type="Timer" parent="."]
+autostart = true
 
 [node name="MoveTimer" type="Timer" parent="."]
 
@@ -18,7 +18,6 @@ clip_children = 2
 position = Vector2(436, 634)
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("2_52mvt")
-script = ExtResource("3_v02qd")
 
 [node name="NextFigure" type="TextureRect" parent="."]
 offset_left = 1367.0

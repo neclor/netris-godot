@@ -1,7 +1,5 @@
 extends Node2D
 
-@onready var Block_scene = preload("res://Block.tscn")
-
 @onready var I_Block_Sprite = preload("res://Sprites/Blocks/I_Block.png")
 @onready var O_Block_Sprite = preload("res://Sprites/Blocks/O_Block.png")
 @onready var T_Block_Sprite = preload("res://Sprites/Blocks/T_Block.png")
