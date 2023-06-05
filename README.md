@@ -1,5 +1,5 @@
 # Netris
-Tetris clone that I made with GDScript.
+Tetris clone that I makingwith GDScript.
 
 ### Install
 - Download Godot4
