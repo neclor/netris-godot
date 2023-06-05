@@ -16,17 +16,8 @@ func _ready():
 
 func _on_game_timer_timeout():
 	if figure_blocks == []:
-		#figure_blocks = Figure.creation_figure()
-		var figure = Figure.chose_next_figure()
-
-		blocks_relative_coords = figure.slice(1).duplicate()
-
-		for i in len(figure) - 1:
-			var block = Block_scene.instantiate()
-			var block_sprite = block.get_node("Block")
-			Block.change_block_color(block_sprite, figure[0])
-
-			figure_blocks.append(block)
+		figure_blocks = Figure.creation_figure()
+		
 
 		for i in len(figure_blocks):
 			print(figure_blocks[i])

@@ -34,7 +34,6 @@ func creation_figure():
 		var block = Main.Block_scene.instantiate()
 		var block_sprite = block.get_node("Block")
 		Block.change_block_color(block_sprite, figure[0])
-
 		figure_blocks.append(block)
 
 	return figure_blocks
