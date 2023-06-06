@@ -30,7 +30,8 @@ func update_cords():
 	for i in len(figure_blocks):
 		figure_blocks[i].position = blocks_relative_coords[i]
 
-
+func update_blocks_relative_coords(blocks_relative_coords_new):
+	blocks_relative_coords = blocks_relative_coords_new
 
 
 func _on_start_button_pressed():

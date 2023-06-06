@@ -28,7 +28,7 @@ func creation_figure():
 
 	var figure = Figure.chose_next_figure()
 
-	Main.blocks_relative_coords = figure.slice(1).duplicate()
+	Main.update_blocks_relative_coords(figure.slice(1).duplicate())
 
 	for i in len(figure) - 1:
 		var block = Main.Block_scene.instantiate()

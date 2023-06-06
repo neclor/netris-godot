@@ -18,6 +18,7 @@ clip_children = 2
 position = Vector2(436, 634)
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("2_52mvt")
+centered = false
 
 [node name="NextFigure" type="TextureRect" parent="."]
 offset_left = 1367.0
