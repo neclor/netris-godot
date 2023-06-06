@@ -28,7 +28,7 @@ func _on_game_timer_timeout():
 func update_cords():
 	print(figure_blocks)
 	for i in len(figure_blocks):
-		figure_blocks[i].position = blocks_relative_coords[i]
+		figure_blocks[i].position = Main.blocks_relative_coords[i]
 
 
 
