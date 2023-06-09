@@ -1,37 +1,30 @@
 extends Node2D
 
-@onready var Block_scene = preload("res://Block.tscn")
+const field_height = 22
+const field_width = 10
 
-var figure_blocks = []
-var blocks_relative_coords
+var top_border = Figure.block_size * 2
+var bottom_border = Figure.block_size * (field_height - 3)
+var left_border = 0
+var right_border = Figure.block_size * (field_width  - 1)
 
 func _ready():
+	init()
+
+func init():
 	pass
 
-
-
-
-
-
-
 func _on_game_timer_timeout():
-	if figure_blocks == []:
-		figure_blocks = Figure.creation_figure()
-		
+	if Figure.figure_blocks == []:
+		var figure_blocks = Figure.instantiate_figure()
 
 		for i in len(figure_blocks):
-			print(figure_blocks[i])
 			$Field.add_child(figure_blocks[i])
-		update_cords()
-	
 
-func update_cords():
-	print(figure_blocks)
-	for i in len(figure_blocks):
-		figure_blocks[i].position = Main.blocks_relative_coords[i]
+		Figure.update_blocks_coordinates()
 
-func update_blocks_relative_coords(blocks_relative_coords_new):
-	blocks_relative_coords = blocks_relative_coords_new
+	else:
+		Figure.move_down()
 
 
 func _on_start_button_pressed():

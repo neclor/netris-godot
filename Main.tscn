@@ -1,9 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://ch1ga4cf763eo"]
+[gd_scene load_steps=3 format=3 uid="uid://ch1ga4cf763eo"]
 
 [ext_resource type="Script" path="res://Scripts/Main.gd" id="1_3ty82"]
-[ext_resource type="Texture2D" uid="uid://brxhe4wnb7jli" path="res://Sprites/Field.png" id="2_52mvt"]
-[ext_resource type="Texture2D" uid="uid://b1ard2jgvwmgk" path="res://Sprites/Blocks/BlockS.png" id="3_jfwma"]
-[ext_resource type="Texture2D" uid="uid://cq3hevu4d2ss8" path="res://Sprites/Blocks/BlockZ.png" id="4_qt2jb"]
+[ext_resource type="Texture2D" uid="uid://dhpiwt56wsysk" path="res://Assets/Field.png" id="2_m3uwa"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_3ty82")
@@ -15,16 +13,11 @@ autostart = true
 
 [node name="Field" type="Sprite2D" parent="."]
 clip_children = 2
-position = Vector2(436, 634)
-scale = Vector2(0.4, 0.4)
-texture = ExtResource("2_52mvt")
+texture_filter = 1
+position = Vector2(176, 53)
+scale = Vector2(1.8, 1.8)
+texture = ExtResource("2_m3uwa")
 centered = false
-
-[node name="NextFigure" type="TextureRect" parent="."]
-offset_left = 1367.0
-offset_top = 122.0
-offset_right = 1856.0
-offset_bottom = 659.0
 
 [node name="Score" type="Label" parent="."]
 offset_left = 857.0
@@ -32,14 +25,4 @@ offset_top = 94.0
 offset_right = 994.0
 offset_bottom = 211.0
 
-[node name="StartButton" type="TextureButton" parent="."]
-offset_left = 17.0
-offset_top = 77.0
-offset_right = 166.0
-offset_bottom = 246.0
-texture_normal = ExtResource("3_jfwma")
-texture_pressed = ExtResource("4_qt2jb")
-ignore_texture_size = true
-
 [connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]
-[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://brxhe4wnb7jli"
-path="res://.godot/imported/Field.png-1fed6b22a2f5e430c15b214370c31d7a.ctex"
+uid="uid://dhpiwt56wsysk"
+path="res://.godot/imported/Field.png-970a1f44c824899499bf722706be4893.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Field.png"
-dest_files=["res://.godot/imported/Field.png-1fed6b22a2f5e430c15b214370c31d7a.ctex"]
+source_file="res://Assets/Field.png"
+dest_files=["res://.godot/imported/Field.png-970a1f44c824899499bf722706be4893.ctex"]
 
 [params]
 

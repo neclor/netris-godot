@@ -1,11 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://l1hicqms8884"]
+[gd_scene load_steps=5 format=3 uid="uid://d2yaqavqaey88"]
 
-[ext_resource type="Script" path="res://Scripts/Block.gd" id="1_4uy5y"]
-[ext_resource type="Texture2D" uid="uid://b1ard2jgvwmgk" path="res://Sprites/Blocks/BlockS.png" id="2_imv1l"]
+[ext_resource type="Shader" path="res://Scripts/Block.gdshader" id="1_cmxfx"]
+[ext_resource type="Texture2D" uid="uid://d0yneokq7ngi6" path="res://Assets/Block.png" id="2_2ik0o"]
+
+[sub_resource type="GDScript" id="GDScript_tp01o"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w1ipx"]
+shader = ExtResource("1_cmxfx")
+shader_parameter/old_color = Color(0, 1, 0, 1)
+shader_parameter/new_color = Color(0, 1, 0, 1)
 
 [node name="Block" type="Node2D"]
-script = ExtResource("1_4uy5y")
+script = SubResource("GDScript_tp01o")
 
 [node name="Block" type="Sprite2D" parent="."]
-texture = ExtResource("2_imv1l")
+texture_filter = 1
+material = SubResource("ShaderMaterial_w1ipx")
+texture = ExtResource("2_2ik0o")
 centered = false
