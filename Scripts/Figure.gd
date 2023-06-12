@@ -2,14 +2,14 @@ extends Node
 
 @onready var Block_scene = preload("res://Block.tscn")
 
-@onready var I_Figure = [Color("#00ffff"), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0), Vector2(block_size * 2, 0)]
-@onready var O_Figure = [Color("#ffff"), Vector2(0, -block_size), Vector2(block_size, -block_size), Vector2(0, 0), Vector2(block_size, 0)]
-@onready var T_Figure = [Color("#ff00ff"), Vector2(0, -block_size), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0)]
-@onready var J_Figure = [Color("#ff7f00"), Vector2(-block_size, -block_size), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0)]
-@onready var L_Figure = [Color("#0000ff"), Vector2(block_size, -block_size), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0)]
-@onready var S_Figure = [Color("#00ff00"), Vector2(0, -block_size), Vector2(block_size, -block_size), Vector2(-block_size, 0), Vector2(0, 0)]
-@onready var Z_Figure = [Color("#ff0000"), Vector2(-block_size, -block_size), Vector2(0, -block_size), Vector2(0, 0), Vector2(block_size, 0)]
-@onready var figures = [I_Figure, O_Figure, T_Figure, J_Figure, L_Figure, S_Figure, Z_Figure]
+const I_Figure = [Color("#00ffff"), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0), Vector2(block_size * 2, 0)]
+const O_Figure = [Color("#ffff"), Vector2(0, -block_size), Vector2(block_size, -block_size), Vector2(0, 0), Vector2(block_size, 0)]
+const T_Figure = [Color("#ff00ff"), Vector2(0, -block_size), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0)]
+const J_Figure = [Color("#ff7f00"), Vector2(-block_size, -block_size), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0)]
+const L_Figure = [Color("#0000ff"), Vector2(block_size, -block_size), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0)]
+const S_Figure = [Color("#00ff00"), Vector2(0, -block_size), Vector2(block_size, -block_size), Vector2(-block_size, 0), Vector2(0, 0)]
+const Z_Figure = [Color("#ff0000"), Vector2(-block_size, -block_size), Vector2(0, -block_size), Vector2(0, 0), Vector2(block_size, 0)]
+const figures = [I_Figure, O_Figure, T_Figure, J_Figure, L_Figure, S_Figure, Z_Figure]
 
 const block_size = 32
 
