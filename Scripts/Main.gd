@@ -1,39 +1,66 @@
 extends Node2D
 
+const block_size = 32
+
 const field_height = 22
 const field_width = 10
 
-var top_border = Figure.block_size * 2
-var bottom_border = Figure.block_size * (field_height - 3)
-var left_border = 0
-var right_border = Figure.block_size * (field_width  - 1)
+const top_border = -(field_height / 2) * Block.block_size
+const bottom_border = (field_height / 2 - 1) * Block.block_size
+const left_border = -(field_width / 2) * Block.block_size
+const right_border =(field_width / 2) * Block.block_size
+
+const initial_coordinates = Vector2(-Block.block_size, -(field_height / 2 - 1) * Block.block_size)
+
+const I_Figure = ["i", Color("#00ffff"), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0), Vector2(block_size * 2, 0)]
+const O_Figure = ["o", Color("#ffff"), Vector2(0, -block_size), Vector2(block_size, -block_size), Vector2(0, 0), Vector2(block_size, 0)]
+const T_Figure = ["t", Color("#ff00ff"), Vector2(0, -block_size), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0)]
+const J_Figure = ["j", Color("#ff7f00"), Vector2(-block_size, -block_size), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0)]
+const L_Figure = ["l", Color("#0000ff"), Vector2(block_size, -block_size), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0)]
+const S_Figure = ["s", Color("#00ff00"), Vector2(0, -block_size), Vector2(block_size, -block_size), Vector2(-block_size, 0), Vector2(0, 0)]
+const Z_Figure = ["z", Color("#ff0000"), Vector2(-block_size, -block_size), Vector2(0, -block_size), Vector2(0, 0), Vector2(block_size, 0)]
+const figures = [I_Figure, O_Figure, T_Figure, J_Figure, L_Figure, S_Figure, Z_Figure]
+
+var figures_bag
+var next_figure
+
+var locked_blocks
+
+var figure
+#var figure_ghost
+#var figure_next
 
 func _ready():
 	init()
 
 func init():
-	pass
+	locked_blocks = []
+
+	figures_bag = figures.duplicate()
+	var new_figure_index = randi_range(0, len(figures_bag) - 1)
+	next_figure = figures_bag[new_figure_index]
+	figures_bag.remove_at(new_figure_index)
+
+	figure = Figure.new(top_border, bottom_border, left_border, right_border, initial_coordinates)
+	for block in figure.instantiate_figure(chose_next_figure()):
+			$Field.add_child(block)
 
 func _on_game_timer_timeout():
-	if Figure.figure_blocks == []:
-		var figure_blocks = Figure.instantiate_figure()
+	if !figure.check_move_down(locked_blocks):
 
-		for i in len(figure_blocks):
-			$Field.add_child(figure_blocks[i])
+		figure = Figure.new(top_border, bottom_border, left_border, right_border, initial_coordinates)
 
-		Figure.update_blocks_coordinates()
+		for block in figure.instantiate_figure(chose_next_figure()):
+			$Field.add_child(block)
 
-	else:
-		Figure.move_down()
+func chose_next_figure():
+	if figures_bag == []:
+		figures_bag = figures.duplicate()
 
+	var new_figure_index = randi_range(0, len(figures_bag) - 1)
+	var present_figure = next_figure
 
-func _on_start_button_pressed():
-	pass
-	#var block = Block_scene.instantiate()
-	#var Block_sprite = block.get_node("Block")
-	#Block.change_block_color(Block_sprite)
-	#$Field.add_child(Block_scene.instantiate())
-	#block.position = Vector2(200, 200)
-	#Block.change_block_color(Block_sprite)
-	#$Field.add_child(block)
-	#Figure.move_down()
+	next_figure = figures_bag[new_figure_index]
+	figures_bag.remove_at(new_figure_index)
+
+	return present_figure

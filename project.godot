@@ -16,8 +16,6 @@ config/features=PackedStringArray("4.0", "Mobile")
 
 [autoload]
 
-Main="*res://Scripts/Main.gd"
-Figure="*res://Scripts/Figure.gd"
 Block="*res://Scripts/Block.gd"
 
 [display]

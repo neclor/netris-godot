@@ -7,22 +7,14 @@
 script = ExtResource("1_3ty82")
 
 [node name="GameTimer" type="Timer" parent="."]
+wait_time = 0.5
 autostart = true
-
-[node name="MoveTimer" type="Timer" parent="."]
 
 [node name="Field" type="Sprite2D" parent="."]
 clip_children = 2
 texture_filter = 1
-position = Vector2(176, 53)
-scale = Vector2(1.8, 1.8)
+position = Vector2(461, 624)
+scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_m3uwa")
-centered = false
-
-[node name="Score" type="Label" parent="."]
-offset_left = 857.0
-offset_top = 94.0
-offset_right = 994.0
-offset_bottom = 211.0
 
 [connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]
