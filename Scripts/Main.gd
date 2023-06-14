@@ -47,6 +47,7 @@ func init():
 
 func _on_game_timer_timeout():
 	if !figure.check_move_down(locked_blocks):
+		locked_blocks.append_array(figure.blocks)
 
 		figure = Figure.new(top_border, bottom_border, left_border, right_border, initial_coordinates)
 
