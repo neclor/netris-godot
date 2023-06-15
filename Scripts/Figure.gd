@@ -1,6 +1,4 @@
-extends Node
-
-class_name Figure
+class_name Figure extends Node
 
 var top_border
 var bottom_border
@@ -9,34 +7,26 @@ var right_border
 
 var coordinates
 var blocks_coordinates
-var blocks
+@export var blocks: Array = []
 
 var figures_bag
 
-func _init(set_top_border, set_bottom_border, set_left_border, set_right_border, initial_coordinates):
+func _init(set_top_border, set_bottom_border, set_left_border, set_right_border, initial_coordinates, structure):
 	top_border = set_top_border
 	bottom_border = set_bottom_border
 	left_border = set_left_border
 	right_border = set_right_border
 
 	coordinates = initial_coordinates
+	blocks_coordinates = structure.slice(2).duplicate()
 
-	blocks = []
-
-func instantiate_figure(figure):
-	blocks_coordinates = figure.slice(2).duplicate()
-
-	for i in len(figure) - 2:
+	for i in len(structure) - 2:
 		var block = Block.Block_scene.instantiate()
 		var block_sprite = block.get_node("Block")
-
-		Block.change_color(block_sprite, figure[1], figure[1])
-
+		Block.change_color(block_sprite, structure[1], structure[1])
 		blocks.append(block)
-
 	update_blocks_coordinates()
 
-	return blocks
 
 func update_blocks_coordinates():
 	for i in len(blocks):

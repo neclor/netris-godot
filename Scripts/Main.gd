@@ -19,10 +19,10 @@ const J_Figure = ["j", Color("#ff7f00"), Vector2(-block_size, -block_size), Vect
 const L_Figure = ["l", Color("#0000ff"), Vector2(block_size, -block_size), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0)]
 const S_Figure = ["s", Color("#00ff00"), Vector2(0, -block_size), Vector2(block_size, -block_size), Vector2(-block_size, 0), Vector2(0, 0)]
 const Z_Figure = ["z", Color("#ff0000"), Vector2(-block_size, -block_size), Vector2(0, -block_size), Vector2(0, 0), Vector2(block_size, 0)]
-const figures = [I_Figure, O_Figure, T_Figure, J_Figure, L_Figure, S_Figure, Z_Figure]
+const structures = [I_Figure, O_Figure, T_Figure, J_Figure, L_Figure, S_Figure, Z_Figure]
 
-var figures_bag
-var next_figure
+var structure_bag
+var next_structure
 
 var locked_blocks
 
@@ -36,32 +36,33 @@ func _ready():
 func init():
 	locked_blocks = []
 
-	figures_bag = figures.duplicate()
-	var new_figure_index = randi_range(0, len(figures_bag) - 1)
-	next_figure = figures_bag[new_figure_index]
-	figures_bag.remove_at(new_figure_index)
+	structure_bag = structures.duplicate()
+	var new_figure_index = randi_range(0, len(structure_bag) - 1)
+	next_structure = structure_bag[new_figure_index]
+	structure_bag.remove_at(new_figure_index)
 
-	figure = Figure.new(top_border, bottom_border, left_border, right_border, initial_coordinates)
-	for block in figure.instantiate_figure(chose_next_figure()):
-			$Field.add_child(block)
+	add_new_figure_to_field()
 
 func _on_game_timer_timeout():
 	if !figure.check_move_down(locked_blocks):
 		locked_blocks.append_array(figure.blocks)
 
-		figure = Figure.new(top_border, bottom_border, left_border, right_border, initial_coordinates)
+		add_new_figure_to_field()
 
-		for block in figure.instantiate_figure(chose_next_figure()):
-			$Field.add_child(block)
 
-func chose_next_figure():
-	if figures_bag == []:
-		figures_bag = figures.duplicate()
+func add_new_figure_to_field():
+	figure = Figure.new(top_border, bottom_border, left_border, right_border, initial_coordinates, chose_next_structure())
+	for block in figure.blocks:
+		$Field.add_child(block)
 
-	var new_figure_index = randi_range(0, len(figures_bag) - 1)
-	var present_figure = next_figure
+func chose_next_structure():
+	if structure_bag == []:
+		structure_bag = structures.duplicate()
 
-	next_figure = figures_bag[new_figure_index]
-	figures_bag.remove_at(new_figure_index)
+	var new_structure_index = randi_range(0, len(structure_bag) - 1)
+	var present_structure = next_structure
 
-	return present_figure
+	next_structure = structure_bag[new_structure_index]
+	structure_bag.remove_at(new_structure_index)
+
+	return present_structure
