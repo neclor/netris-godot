@@ -3,37 +3,94 @@ extends Node2D
 const field_height = 22
 const field_width = 10
 
-var top_border = Figure.block_size * 2
-var bottom_border = Figure.block_size * (field_height - 3)
-var left_border = 0
-var right_border = Figure.block_size * (field_width  - 1)
+const top_border = -(field_height / 2) * Block.block_size
+const bottom_border = (field_height / 2 - 1) * Block.block_size
+const left_border = -(field_width / 2) * Block.block_size
+const right_border =(field_width / 2 - 1) * Block.block_size
+
+const initial_coordinates = Vector2(-Block.block_size, -(field_height / 2 - 1) * Block.block_size)
+
+const figure_names = ["i", "o", "t", "j", "l", "s", "z"]
+
+var figure_names_bag
+var next_figure_name
+
+var locked_blocks
+
+var figure
+#var figure_ghost
+#var figure_next
 
 func _ready():
 	init()
 
 func init():
-	pass
+	figure_names_bag = []
+	locked_blocks = []
+
+	chose_next_figure()
+	creating_new_figure()
 
 func _on_game_timer_timeout():
-	if Figure.figure_blocks == []:
-		var figure_blocks = Figure.instantiate_figure()
+	if !figure.check_move_down(locked_blocks):
+		locked_blocks.append_array(figure.blocks)
 
-		for i in len(figure_blocks):
-			$Field.add_child(figure_blocks[i])
+		creating_new_figure()
 
-		Figure.update_blocks_coordinates()
+func creating_new_figure():
+	figure = Figure.new(chose_next_figure(), initial_coordinates, top_border, bottom_border, left_border, right_border)
+	for block in figure.blocks:
+		$Field.add_child(block)
 
-	else:
-		Figure.move_down()
+func chose_next_figure():
+	if figure_names_bag == []:
+		figure_names_bag = figure_names.duplicate()
+
+	var new_figure_name_index = randi_range(0, len(figure_names_bag) - 1)
+	var current_figure_name = next_figure_name
+
+	next_figure_name = figure_names_bag[new_figure_name_index]
+	figure_names_bag.remove_at(new_figure_name_index)
+
+	return current_figure_name
 
 
-func _on_start_button_pressed():
-	pass
-	#var block = Block_scene.instantiate()
-	#var Block_sprite = block.get_node("Block")
-	#Block.change_block_color(Block_sprite)
-	#$Field.add_child(Block_scene.instantiate())
-	#block.position = Vector2(200, 200)
-	#Block.change_block_color(Block_sprite)
-	#$Field.add_child(block)
-	#Figure.move_down()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+func _input(event):
+	if Input.is_action_pressed("Down"):
+		figure.check_move_down(locked_blocks)
+
+	if Input.is_action_pressed("Right"):
+		figure.check_move_right(locked_blocks)
+
+	if Input.is_action_pressed("Left"):
+		figure.check_move_left(locked_blocks)
+
+	if Input.is_action_just_pressed("Rotation"):
+		figure.check_move_rotation(locked_blocks)
+
+
+
+
+
+
+
+
