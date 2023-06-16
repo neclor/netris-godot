@@ -12,19 +12,12 @@ const right_border =(field_width / 2) * Block.block_size
 
 const initial_coordinates = Vector2(-Block.block_size, -(field_height / 2 - 1) * Block.block_size)
 
-const I_Figure = ["i", Color("#00ffff"), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0), Vector2(block_size * 2, 0)]
-const O_Figure = ["o", Color("#ffff"), Vector2(0, -block_size), Vector2(block_size, -block_size), Vector2(0, 0), Vector2(block_size, 0)]
-const T_Figure = ["t", Color("#ff00ff"), Vector2(0, -block_size), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0)]
-const J_Figure = ["j", Color("#ff7f00"), Vector2(-block_size, -block_size), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0)]
-const L_Figure = ["l", Color("#0000ff"), Vector2(block_size, -block_size), Vector2(-block_size, 0), Vector2(0, 0), Vector2(block_size, 0)]
-const S_Figure = ["s", Color("#00ff00"), Vector2(0, -block_size), Vector2(block_size, -block_size), Vector2(-block_size, 0), Vector2(0, 0)]
-const Z_Figure = ["z", Color("#ff0000"), Vector2(-block_size, -block_size), Vector2(0, -block_size), Vector2(0, 0), Vector2(block_size, 0)]
-const structures = [I_Figure, O_Figure, T_Figure, J_Figure, L_Figure, S_Figure, Z_Figure]
+const figure_names = ["i", "o", "t", "j", "l", "s", "z"]
 
-var structure_bag
-var next_structure
+var structure_bag = []
+var next_name
 
-var locked_blocks
+var locked_blocks = []
 
 var figure
 #var figure_ghost
@@ -34,13 +27,7 @@ func _ready():
 	init()
 
 func init():
-	locked_blocks = []
-
-	structure_bag = structures.duplicate()
-	var new_figure_index = randi_range(0, len(structure_bag) - 1)
-	next_structure = structure_bag[new_figure_index]
-	structure_bag.remove_at(new_figure_index)
-
+	chose_next_structure()
 	add_new_figure_to_field()
 
 func _on_game_timer_timeout():
@@ -57,12 +44,12 @@ func add_new_figure_to_field():
 
 func chose_next_structure():
 	if structure_bag == []:
-		structure_bag = structures.duplicate()
+		structure_bag = figure_names.duplicate()
 
 	var new_structure_index = randi_range(0, len(structure_bag) - 1)
-	var present_structure = next_structure
+	var current_name = next_name
 
-	next_structure = structure_bag[new_structure_index]
+	next_name = structure_bag[new_structure_index]
 	structure_bag.remove_at(new_structure_index)
 
-	return present_structure
+	return current_name
