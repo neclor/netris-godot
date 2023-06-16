@@ -16,11 +16,15 @@ const figures_description = {
 	"z": [ Color("#ff0000"), Vector2(-Block.block_size, -Block.block_size), Vector2(0, -Block.block_size), Vector2(0, 0), Vector2(Block.block_size, 0)],
 }
 
+var figure_name
+
 var coordinates
 var blocks_coordinates
 var blocks
 
-func _init(figure_name, initial_coordinates, set_top_border, set_bottom_border, set_left_border, set_right_border):
+func _init(set_figure_name, initial_coordinates, set_top_border, set_bottom_border, set_left_border, set_right_border):
+	blocks = []
+
 	top_border = set_top_border
 	bottom_border = set_bottom_border
 	left_border = set_left_border
@@ -28,13 +32,10 @@ func _init(figure_name, initial_coordinates, set_top_border, set_bottom_border, 
 
 	coordinates = initial_coordinates
 
+	figure_name = set_figure_name
 	var figure_description = figures_description[figure_name];
-
 	blocks_coordinates = figure_description.slice(1)
-
 	var color = figure_description[0]
-
-	blocks = []
 
 	for i in len(figure_description) - 1:
 		var block = Block.Block_scene.instantiate()
@@ -45,6 +46,11 @@ func _init(figure_name, initial_coordinates, set_top_border, set_bottom_border, 
 		blocks.append(block)
 
 	update_blocks_coordinates()
+
+
+
+
+
 
 func update_blocks_coordinates():
 	for i in len(blocks):
@@ -77,7 +83,7 @@ func move_down():
 	update_blocks_coordinates()
 
 func check_move_rotation(locked_blocks):
-	if blocks == []: #or paused
+	if blocks == [] or figure_name == "o": #or paused
 		return null
 
 	else:
