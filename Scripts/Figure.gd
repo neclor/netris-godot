@@ -47,14 +47,76 @@ func _init(set_figure_name, initial_coordinates, set_top_border, set_bottom_bord
 
 	update_blocks_coordinates()
 
+#func change into a ghost
 
-
-
-
+#func change to next figure
 
 func update_blocks_coordinates():
 	for i in len(blocks):
 		blocks[i].position = blocks_coordinates[i] + coordinates
+
+#Сhecking functions
+
+func check_line_fill(locked_blocks, field_width):
+	var last_fallen_blocks_coordinates_y = []
+	var blocks_indexes_in_tested_line
+	
+	var blocks_indexes_in_filled_lines =[]
+	var filled_lines_coordinates_y = []
+
+	var locked_blocks_coordinates = []
+
+	for block in locked_blocks:
+		locked_blocks_coordinates.append(block.position)
+
+	for block in blocks:
+		if !(block.position.y in last_fallen_blocks_coordinates_y):
+			last_fallen_blocks_coordinates_y.append(block.position.y)
+
+	for block_coordinate_y in last_fallen_blocks_coordinates_y:
+		blocks_indexes_in_tested_line = []
+
+		for field_block in field_width:
+			var block_index_in_tested_line = locked_blocks_coordinates.find(Vector2(left_border + field_block * Block.block_size, block_coordinate_y))
+			if block_index_in_tested_line != -1:
+				blocks_indexes_in_tested_line.append(block_index_in_tested_line)
+
+		if len(blocks_indexes_in_tested_line) == field_width:
+			blocks_indexes_in_filled_lines.append_array(blocks_indexes_in_tested_line)
+			filled_lines_coordinates_y.append(block_coordinate_y)
+
+	var number_filled_lines = len(filled_lines_coordinates_y)
+
+	if number_filled_lines != 0:
+		locked_blocks = remove_filled_lines(locked_blocks, blocks_indexes_in_filled_lines)
+		move_locked_blocks_down(locked_blocks, filled_lines_coordinates_y)
+
+		#update_score(number_filled_lines)
+		#change_speed(number_filled_lines)
+
+	return locked_blocks
+
+func remove_filled_lines(locked_blocks, blocks_indexes_in_filled_lines):
+	blocks_indexes_in_filled_lines.sort()
+	blocks_indexes_in_filled_lines.reverse()
+
+	for block_index in blocks_indexes_in_filled_lines:
+		locked_blocks[block_index].queue_free()
+		locked_blocks.remove_at(block_index)
+
+	return locked_blocks
+
+func move_locked_blocks_down(locked_blocks, filled_lines_coordinates_y):
+	filled_lines_coordinates_y.sort()
+
+	for filled_line_coordinate_y in filled_lines_coordinates_y:
+		for i in len(locked_blocks):
+			if locked_blocks[i].position.y <= filled_line_coordinate_y:
+				locked_blocks[i].position.y += Block.block_size
+
+
+
+#Move functions
 
 func check_move_down(locked_blocks):
 	if blocks == []: #or paused
@@ -82,7 +144,7 @@ func move_down():
 	coordinates.y += Block.block_size
 	update_blocks_coordinates()
 
-func check_move_rotation(locked_blocks):
+func check_move_rotation(locked_blocks, direction):
 	if blocks == [] or figure_name == "o": #or paused
 		return null
 
@@ -95,15 +157,15 @@ func check_move_rotation(locked_blocks):
 		var next_block_coordinates
 
 		for block_coordinates in blocks_coordinates:
-			next_block_coordinates = Vector2(-block_coordinates.y, block_coordinates.x) + coordinates
+			next_block_coordinates = Vector2(-block_coordinates.y * direction, block_coordinates.x * direction) + coordinates
 
 			if next_block_coordinates.y > bottom_border or next_block_coordinates.x > right_border or next_block_coordinates.x < left_border or next_block_coordinates in locked_blocks_coordinates:
-				return check_move_super_rotation(locked_blocks_coordinates)
+				return check_move_super_rotation(locked_blocks_coordinates, direction)
 
-		rotation()
+		rotation(direction)
 		return true
 
-func check_move_super_rotation(locked_blocks_coordinates):
+func check_move_super_rotation(locked_blocks_coordinates, direction):
 	var flag = true
 	
 	var next_block_coordinates
@@ -112,14 +174,14 @@ func check_move_super_rotation(locked_blocks_coordinates):
 	next_coordinates.x += Block.block_size
 
 	for block_coordinates in blocks_coordinates:
-		next_block_coordinates = Vector2(-block_coordinates.y, block_coordinates.x) + next_coordinates
+		next_block_coordinates = Vector2(-block_coordinates.y * direction, block_coordinates.x * direction) + next_coordinates
 		if next_block_coordinates.y > bottom_border or next_block_coordinates.x > right_border or next_block_coordinates.x < left_border or next_block_coordinates in locked_blocks_coordinates:
 			flag = false
 			break
 
 	if flag:
 		coordinates = next_coordinates
-		rotation()
+		rotation(direction)
 		return true
 	flag = true
 
@@ -127,14 +189,14 @@ func check_move_super_rotation(locked_blocks_coordinates):
 	next_coordinates.x -= Block.block_size
 
 	for block_coordinates_2 in blocks_coordinates:
-		next_block_coordinates = Vector2(-block_coordinates_2.y, block_coordinates_2.x) + next_coordinates
+		next_block_coordinates = Vector2(-block_coordinates_2.y * direction, block_coordinates_2.x * direction) + next_coordinates
 		if next_block_coordinates.y > bottom_border or next_block_coordinates.x > right_border or next_block_coordinates.x < left_border or next_block_coordinates in locked_blocks_coordinates:
 			flag = false
 			break
 
 	if flag:
 		coordinates = next_coordinates
-		rotation()
+		rotation(direction)
 		return true
 	flag = true
 
@@ -144,14 +206,14 @@ func check_move_super_rotation(locked_blocks_coordinates):
 		next_coordinates.x += Block.block_size * 2
 
 		for block_coordinates_2 in blocks_coordinates:
-			next_block_coordinates = Vector2(-block_coordinates_2.y, block_coordinates_2.x) + next_coordinates
+			next_block_coordinates = Vector2(-block_coordinates_2.y * direction, block_coordinates_2.x * direction) + next_coordinates
 			if next_block_coordinates.y > bottom_border or next_block_coordinates.x > right_border or next_block_coordinates.x < left_border or next_block_coordinates in locked_blocks_coordinates:
 				flag = false
 				break
 
 		if flag:
 			coordinates = next_coordinates
-			rotation()
+			rotation(direction)
 			return true
 		flag = true
 		
@@ -159,30 +221,24 @@ func check_move_super_rotation(locked_blocks_coordinates):
 		next_coordinates.x -= Block.block_size * 2
 
 		for block_coordinates_2 in blocks_coordinates:
-			next_block_coordinates = Vector2(-block_coordinates_2.y, block_coordinates_2.x) + next_coordinates
+			next_block_coordinates = Vector2(-block_coordinates_2.y * direction, block_coordinates_2.x * direction) + next_coordinates
 			if next_block_coordinates.y > bottom_border or next_block_coordinates.x > right_border or next_block_coordinates.x < left_border or next_block_coordinates in locked_blocks_coordinates:
 				flag = false
 				break
 
 		if flag:
 			coordinates = next_coordinates
-			rotation()
+			rotation(direction)
 			return true
 
 	return false
 
-
-
-
-
-
-
-func rotation():
+func rotation(direction):
 	var next_block_coordinates
 
 	for i in len(blocks_coordinates):
-		next_block_coordinates = blocks_coordinates[i].x
-		blocks_coordinates[i].x = -blocks_coordinates[i].y
+		next_block_coordinates = blocks_coordinates[i].x * direction
+		blocks_coordinates[i].x = -blocks_coordinates[i].y * direction
 		blocks_coordinates[i].y = next_block_coordinates
 
 	update_blocks_coordinates()

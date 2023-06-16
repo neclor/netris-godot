@@ -34,6 +34,7 @@ func init():
 func _on_game_timer_timeout():
 	if !figure.check_move_down(locked_blocks):
 		locked_blocks.append_array(figure.blocks)
+		locked_blocks = figure.check_line_fill(locked_blocks, field_width)
 
 		creating_new_figure()
 
@@ -85,7 +86,10 @@ func _input(event):
 		figure.check_move_left(locked_blocks)
 
 	if Input.is_action_just_pressed("Rotation"):
-		figure.check_move_rotation(locked_blocks)
+		figure.check_move_rotation(locked_blocks, 1)
+	
+	if Input.is_action_just_pressed("AnotherRotation"):
+		figure.check_move_rotation(locked_blocks, -1)
 
 
 
