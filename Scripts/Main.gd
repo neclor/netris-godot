@@ -72,10 +72,11 @@ func chose_next_figure():
 
 
 
-
-
+var a = 0
+var mouse_clicked = false
 
 func _input(event):
+
 	if Input.is_action_pressed("Down"):
 		figure.check_move_down(locked_blocks)
 
@@ -90,6 +91,44 @@ func _input(event):
 	
 	if Input.is_action_just_pressed("AnotherRotation"):
 		figure.check_move_rotation(locked_blocks, -1)
+		
+	#if event is InputEventScreenTouch: 
+		#figure.check_move_rotation(locked_blocks, 1)
+		
+	#if event is InputEventScreenDrag:
+		#if event.position.x - a >= Block.block_size:
+			#figure.check_move_right(locked_blocks)
+			#a += Block.block_size
+			
+		#elif event.position.x - a <= -Block.block_size:
+			#figure.check_move_left(locked_blocks)
+			#a -= Block.block_size
+
+
+
+	if Input.is_action_just_released("Click"):
+		mouse_clicked = false
+
+
+
+
+
+	if Input.is_action_pressed("Click"):
+		if !mouse_clicked:
+			figure.check_move_rotation(locked_blocks, 1)
+			a = event.position.x
+			mouse_clicked = true
+
+
+	if InputEventMouseMotion:
+		if mouse_clicked:
+			if event.position.x - a >= Block.block_size:
+				figure.check_move_right(locked_blocks)
+				a += Block.block_size
+			
+			elif event.position.x - a <= -Block.block_size:
+				figure.check_move_left(locked_blocks)
+				a -= Block.block_size
 
 
 

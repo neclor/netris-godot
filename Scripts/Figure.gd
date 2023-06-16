@@ -55,7 +55,7 @@ func update_blocks_coordinates():
 	for i in len(blocks):
 		blocks[i].position = blocks_coordinates[i] + coordinates
 
-#Сhecking functions
+#Сheck lines functions
 
 func check_line_fill(locked_blocks, field_width):
 	var last_fallen_blocks_coordinates_y = []
