@@ -71,9 +71,8 @@ func chose_next_figure():
 
 
 
-
-var a = 0
-var mouse_clicked = false
+var just_touch
+var touch_position 
 
 func _input(event):
 
@@ -88,50 +87,34 @@ func _input(event):
 
 	if Input.is_action_just_pressed("Rotation"):
 		figure.check_move_rotation(locked_blocks, 1)
-	
+
 	if Input.is_action_just_pressed("AnotherRotation"):
 		figure.check_move_rotation(locked_blocks, -1)
-		
-	#if event is InputEventScreenTouch: 
-		#figure.check_move_rotation(locked_blocks, 1)
-		
-	#if event is InputEventScreenDrag:
-		#if event.position.x - a >= Block.block_size:
-			#figure.check_move_right(locked_blocks)
-			#a += Block.block_size
-			
-		#elif event.position.x - a <= -Block.block_size:
-			#figure.check_move_left(locked_blocks)
-			#a -= Block.block_size
 
+	if event is InputEventScreenTouch:
+		if !event.is_pressed():
+			if just_touch:
+				figure.check_move_rotation(locked_blocks, 1)
+		just_touch = true
+		touch_position = event.position
 
+	if event is InputEventScreenDrag:
+		if event.velocity.y >= 3000:
+			pass
 
-	if Input.is_action_just_released("Click"):
-		mouse_clicked = false
+		elif event.position.y - touch_position.y >= Block.block_size:
+			touch_position.y += Block.block_size
+			figure.check_move_down(locked_blocks)
 
+		if event.position.x - touch_position.x >= Block.block_size:
+			touch_position.x += Block.block_size
+			figure.check_move_right(locked_blocks)
 
+		elif event.position.x - touch_position.x <= -Block.block_size:
+			touch_position.x -= Block.block_size
+			figure.check_move_left(locked_blocks)
 
-
-
-	if Input.is_action_pressed("Click"):
-		if !mouse_clicked:
-			figure.check_move_rotation(locked_blocks, 1)
-			a = event.position.x
-			mouse_clicked = true
-
-
-	if InputEventMouseMotion:
-		if mouse_clicked:
-			if event.position.x - a >= Block.block_size:
-				figure.check_move_right(locked_blocks)
-				a += Block.block_size
-			
-			elif event.position.x - a <= -Block.block_size:
-				figure.check_move_left(locked_blocks)
-				a -= Block.block_size
-
-
-
+		just_touch = false
 
 
 
