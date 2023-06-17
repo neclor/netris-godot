@@ -76,9 +76,8 @@ func update_ghost_coordinates(set_coordinates, set_blocks_coordinates, locked_bl
 
 	update_blocks_coordinates()
 
-	while(true):
-		if !check_move_down(locked_blocks):
-			break
+	while (check_move_down(locked_blocks)):
+		pass
 
 func remove_ghost():
 	for block in blocks:
