@@ -10,7 +10,7 @@ const figures_description = {
 	"i": [Color("#00ffff"), Vector2(-Block.block_size, 0), Vector2(0, 0), Vector2(Block.block_size, 0), Vector2(Block.block_size * 2, 0)],
 	"o": [Color("#ffff00"), Vector2(0, -Block.block_size), Vector2(Block.block_size, -Block.block_size), Vector2(0, 0), Vector2(Block.block_size, 0)],
 	"t": [Color("#ff00ff"), Vector2(0, -Block.block_size), Vector2(-Block.block_size, 0), Vector2(0, 0), Vector2(Block.block_size, 0)],
-	"j": [Color("#ff7f00"), Vector2(-Block.block_size, -Block.block_size), Vector2(-Block.block_size, 0), Vector2(0, 0), Vector2(Block.block_size, 0)],
+	"j": [Color("#ff8000"), Vector2(-Block.block_size, -Block.block_size), Vector2(-Block.block_size, 0), Vector2(0, 0), Vector2(Block.block_size, 0)],
 	"l": [Color("#0000ff"), Vector2(Block.block_size, -Block.block_size), Vector2(-Block.block_size, 0), Vector2(0, 0), Vector2(Block.block_size, 0)],
 	"s": [Color("#00ff00"), Vector2(0, -Block.block_size), Vector2(Block.block_size, -Block.block_size), Vector2(-Block.block_size, 0), Vector2(0, 0)],
 	"z": [ Color("#ff0000"), Vector2(-Block.block_size, -Block.block_size), Vector2(0, -Block.block_size), Vector2(0, 0), Vector2(Block.block_size, 0)],
@@ -21,6 +21,8 @@ var figure_name
 var coordinates
 var blocks_coordinates
 var blocks
+
+#Basic functions
 
 func _init(set_figure_name, initial_coordinates, set_top_border, set_bottom_border, set_left_border, set_right_border):
 	blocks = []
@@ -41,19 +43,90 @@ func _init(set_figure_name, initial_coordinates, set_top_border, set_bottom_bord
 		var block = Block.Block_scene.instantiate()
 		var block_sprite = block.get_node("Block")
 
+		block.z_index = 2
+
 		Block.change_color(block_sprite, color, color)
 
 		blocks.append(block)
 
 	update_blocks_coordinates()
 
-#func change into a ghost
-
-#func change to next figure
-
 func update_blocks_coordinates():
 	for i in len(blocks):
 		blocks[i].position = blocks_coordinates[i] + coordinates
+
+#Ghost functions
+
+func change_into_ghost():
+	var figure_description = figures_description[figure_name];
+	var color = figure_description[0]
+	print(color)
+
+	for block in blocks:
+		var block_sprite = block.get_node("Block")
+		print(block_sprite)
+
+		block.z_index = 0
+
+		Block.change_color(block_sprite, Color("#000000"), color)
+
+func update_ghost_coordinates(set_coordinates, set_blocks_coordinates, locked_blocks):
+	coordinates = set_coordinates
+	blocks_coordinates = set_blocks_coordinates
+
+	update_blocks_coordinates()
+
+	while(true):
+		if !check_move_down(locked_blocks):
+			break
+
+func remove_ghost():
+	for block in blocks:
+		block.queue_free()
+
+
+
+
+
+
+
+
+var ghost:
+	get:
+		for block in blocks:
+			var figure_description = figures_description[figure_name];
+			var color = figure_description[0]
+			var block_sprite = block.get_node("Block")
+			Block.change_color(block_sprite, Color("#000000"), color)
+
+	set(figure_blocks):
+		for i in len(blocks):
+			blocks[i].position = figure_blocks[i].position
+
+		#swhile(true):
+			#if !check_move_down(locked_blocks):
+				#break
+
+
+
+
+
+
+
+
+
+
+
+#func change to next figure
+
+
+
+
+
+
+
+
+
 
 #Сheck lines functions
 
@@ -113,8 +186,6 @@ func move_locked_blocks_down(locked_blocks, filled_lines_coordinates_y):
 		for i in len(locked_blocks):
 			if locked_blocks[i].position.y <= filled_line_coordinate_y:
 				locked_blocks[i].position.y += Block.block_size
-
-
 
 #Move functions
 
