@@ -19,7 +19,7 @@ var locked_blocks
 
 var figure
 var figure_ghost
-#var figure_next
+var figure_next
 
 func _ready():
 	init()
@@ -33,10 +33,12 @@ func init():
 
 func _on_game_timer_timeout():
 	if !figure.check_move_down(locked_blocks):
+
 		locked_blocks.append_array(figure.blocks)
 		locked_blocks = figure.check_line_fill(locked_blocks, field_width)
 
-		figure_ghost.remove_ghost()
+		figure_next.remove_figure()
+		figure_ghost.remove_figure()
 
 		creating_new_figure()
 
@@ -44,14 +46,17 @@ func creating_new_figure():
 	var choosed_figure = choose_next_figure()
 
 	figure = Figure.new(choosed_figure, initial_coordinates, top_border, bottom_border, left_border, right_border)
-
 	for block in figure.blocks:
 		$Field.add_child(block)
 
+	figure_next = Figure.new(next_figure_name, initial_coordinates, top_border, bottom_border, left_border, right_border)
+	figure_next.change_into_next_figure()
+	for block in figure_next.blocks:
+		$NextFigureField.add_child(block)
+
 	figure_ghost = Figure.new(choosed_figure, initial_coordinates, top_border, bottom_border, left_border, right_border)
 	figure_ghost.change_into_ghost()
-	figure_ghost.update_ghost_coordinates(figure.coordinates, figure.blocks_coordinates, locked_blocks)
-
+	figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
 	for block in figure_ghost.blocks:
 		$Field.add_child(block)
 
@@ -87,37 +92,40 @@ var just_touch
 var touch_position 
 
 func _input(event):
-
 	if Input.is_action_pressed("Down"):
 		figure.check_move_down(locked_blocks)
 
 	if Input.is_action_pressed("Right"):
 		figure.check_move_right(locked_blocks)
-		figure_ghost.update_ghost_coordinates(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+		figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
 
 	if Input.is_action_pressed("Left"):
 		figure.check_move_left(locked_blocks)
-		figure_ghost.update_ghost_coordinates(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+		figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
 
 	if Input.is_action_just_pressed("Rotation"):
 		figure.check_move_rotation(locked_blocks, 1)
-		figure_ghost.update_ghost_coordinates(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+		figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
 
 	if Input.is_action_just_pressed("AnotherRotation"):
 		figure.check_move_rotation(locked_blocks, -1)
-		figure_ghost.update_ghost_coordinates(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+		figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+		
+	if Input.is_action_just_pressed("Fall"):
+		figure.move_fall(locked_blocks)
 
 	if event is InputEventScreenTouch:
 		if !event.is_pressed():
 			if just_touch:
 				figure.check_move_rotation(locked_blocks, 1)
-				figure_ghost.update_ghost_coordinates(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+				figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+
 		just_touch = true
 		touch_position = event.position
 
 	if event is InputEventScreenDrag:
 		if event.velocity.y >= 3000:
-			pass
+			figure.move_fall(locked_blocks)
 
 		elif event.position.y - touch_position.y >= Block.block_size:
 			touch_position.y += Block.block_size
@@ -126,16 +134,11 @@ func _input(event):
 		if event.position.x - touch_position.x >= Block.block_size:
 			touch_position.x += Block.block_size
 			figure.check_move_right(locked_blocks)
-			figure_ghost.update_ghost_coordinates(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+			figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
 
 		elif event.position.x - touch_position.x <= -Block.block_size:
 			touch_position.x -= Block.block_size
 			figure.check_move_left(locked_blocks)
-			figure_ghost.update_ghost_coordinates(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+			figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
 
 		just_touch = false
-
-
-
-
-

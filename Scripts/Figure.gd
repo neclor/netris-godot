@@ -55,78 +55,45 @@ func update_blocks_coordinates():
 	for i in len(blocks):
 		blocks[i].position = blocks_coordinates[i] + coordinates
 
+func remove_figure():
+	for block in blocks:
+		block.queue_free()
+
+#Next figure functions
+
+func change_into_next_figure():
+	if figure_name == "i":
+		coordinates = Vector2(-Block.block_size, -Block.block_size / 2)
+
+	elif figure_name == "o":
+		coordinates = Vector2(-Block.block_size, 0)
+
+	else:
+		coordinates = Vector2(-Block.block_size / 2, 0)
+	
+	update_blocks_coordinates()
+
 #Ghost functions
 
 func change_into_ghost():
 	var figure_description = figures_description[figure_name];
 	var color = figure_description[0]
-	print(color)
 
 	for block in blocks:
 		var block_sprite = block.get_node("Block")
-		print(block_sprite)
 
 		block.z_index = 0
 
 		Block.change_color(block_sprite, Color("#000000"), color)
 
-func update_ghost_coordinates(set_coordinates, set_blocks_coordinates, locked_blocks):
+func ghost_move_down(set_coordinates, set_blocks_coordinates, locked_blocks):
 	coordinates = set_coordinates
 	blocks_coordinates = set_blocks_coordinates
 
 	update_blocks_coordinates()
 
-	while(true):
-		if !check_move_down(locked_blocks):
-			break
-
-func remove_ghost():
-	for block in blocks:
-		block.queue_free()
-
-
-
-
-
-
-
-
-var ghost:
-	get:
-		for block in blocks:
-			var figure_description = figures_description[figure_name];
-			var color = figure_description[0]
-			var block_sprite = block.get_node("Block")
-			Block.change_color(block_sprite, Color("#000000"), color)
-
-	set(figure_blocks):
-		for i in len(blocks):
-			blocks[i].position = figure_blocks[i].position
-
-		#swhile(true):
-			#if !check_move_down(locked_blocks):
-				#break
-
-
-
-
-
-
-
-
-
-
-
-#func change to next figure
-
-
-
-
-
-
-
-
-
+	while (check_move_down(locked_blocks)):
+		pass
 
 #Сheck lines functions
 
@@ -366,7 +333,6 @@ func move_left():
 	coordinates.x -= Block.block_size
 	update_blocks_coordinates()
 
-
-
-
-
+func move_fall(locked_blocks):
+	while (check_move_down(locked_blocks)):
+		pass
