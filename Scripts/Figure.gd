@@ -13,7 +13,9 @@ const figures_description = {
 	"j": [Color("#ff8000"), Vector2(-Block.block_size, -Block.block_size), Vector2(-Block.block_size, 0), Vector2(0, 0), Vector2(Block.block_size, 0)],
 	"l": [Color("#0000ff"), Vector2(Block.block_size, -Block.block_size), Vector2(-Block.block_size, 0), Vector2(0, 0), Vector2(Block.block_size, 0)],
 	"s": [Color("#00ff00"), Vector2(0, -Block.block_size), Vector2(Block.block_size, -Block.block_size), Vector2(-Block.block_size, 0), Vector2(0, 0)],
-	"z": [ Color("#ff0000"), Vector2(-Block.block_size, -Block.block_size), Vector2(0, -Block.block_size), Vector2(0, 0), Vector2(Block.block_size, 0)],
+	"z": [Color("#ff0000"), Vector2(-Block.block_size, -Block.block_size), Vector2(0, -Block.block_size), Vector2(0, 0), Vector2(Block.block_size, 0)],
+	"g": [Color("#8000ff"), Vector2(0, -Block.block_size), Vector2(0, 0), Vector2(Block.block_size, 0)],
+	"y": [Color("#00ff80"), Vector2(-Block.block_size, 0), Vector2(0, 0), Vector2(Block.block_size, 0)]
 }
 
 var figure_name
@@ -65,8 +67,11 @@ func change_into_next_figure():
 	if figure_name == "i":
 		coordinates = Vector2(-Block.block_size, -Block.block_size / 2)
 
-	elif figure_name == "o":
+	elif figure_name == "o" or figure_name == "g":
 		coordinates = Vector2(-Block.block_size, 0)
+
+	elif figure_name == "y":
+		coordinates = Vector2(-Block.block_size / 2, -Block.block_size / 2)
 
 	else:
 		coordinates = Vector2(-Block.block_size / 2, 0)
@@ -87,12 +92,15 @@ func change_into_ghost():
 		Block.change_color(block_sprite, Color("#000000"), color)
 
 func ghost_move_down(set_coordinates, set_blocks_coordinates, locked_blocks):
+	if blocks == []:
+		return null
+	
 	coordinates = set_coordinates
 	blocks_coordinates = set_blocks_coordinates
 
 	update_blocks_coordinates()
 
-	while (check_move_down(locked_blocks)):
+	while(check_move_down(locked_blocks)):
 		pass
 
 #Сheck lines functions
@@ -153,6 +161,11 @@ func move_locked_blocks_down(locked_blocks, filled_lines_coordinates_y):
 		for i in len(locked_blocks):
 			if locked_blocks[i].position.y <= filled_line_coordinate_y:
 				locked_blocks[i].position.y += Block.block_size
+
+
+
+
+
 
 #Move functions
 
@@ -334,5 +347,5 @@ func move_left():
 	update_blocks_coordinates()
 
 func move_fall(locked_blocks):
-	while (check_move_down(locked_blocks)):
+	while(check_move_down(locked_blocks)):
 		pass

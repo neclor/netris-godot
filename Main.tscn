@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://ch1ga4cf763eo"]
+[gd_scene load_steps=6 format=3 uid="uid://ch1ga4cf763eo"]
 
 [ext_resource type="Script" path="res://Scripts/Main.gd" id="1_3ty82"]
 [ext_resource type="Texture2D" uid="uid://dhpiwt56wsysk" path="res://Assets/Field.png" id="2_m3uwa"]
 [ext_resource type="Texture2D" uid="uid://cdqxx34im05q8" path="res://Assets/NextFigureField.png" id="3_4cq3l"]
+[ext_resource type="Texture2D" uid="uid://bf8rjckhvgv00" path="res://Assets/Start.png" id="4_x1amu"]
+[ext_resource type="Texture2D" uid="uid://dakp28rbasam5" path="res://Assets/Pause.png" id="5_a8sra"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_3ty82")
@@ -22,5 +24,24 @@ texture = ExtResource("2_m3uwa")
 position = Vector2(450, 126)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("3_4cq3l")
+
+[node name="NeclorLable" type="Label" parent="."]
+offset_left = 29.0
+offset_top = 12.0
+offset_right = 163.0
+offset_bottom = 66.0
+text = "Neclor"
+vertical_alignment = 1
+
+[node name="PauseButton" type="TextureButton" parent="."]
+offset_left = 37.0
+offset_top = 212.0
+offset_right = 137.0
+offset_bottom = 307.0
+toggle_mode = true
+texture_normal = ExtResource("4_x1amu")
+texture_pressed = ExtResource("5_a8sra")
+ignore_texture_size = true
+stretch_mode = 0
 
 [connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]

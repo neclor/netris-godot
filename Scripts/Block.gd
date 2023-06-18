@@ -10,7 +10,7 @@ const external_old_color = Color("#00ff00")
 
 func change_color(block_sprite, interior_new_color, external_new_color):
 	var new_block_image = block_texture.get_image()
-	
+
 	for x in block_size:
 		for y in block_size:
 

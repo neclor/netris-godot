@@ -3,14 +3,14 @@ extends Node2D
 const field_height = 22
 const field_width = 10
 
-const top_border = -(field_height / 2) * Block.block_size
+const top_border = -(field_height / 2 - 2) * Block.block_size
 const bottom_border = (field_height / 2 - 1) * Block.block_size
 const left_border = -(field_width / 2) * Block.block_size
 const right_border =(field_width / 2 - 1) * Block.block_size
 
 const initial_coordinates = Vector2(-Block.block_size, -(field_height / 2 - 1) * Block.block_size)
 
-const figure_names = ["i", "o", "t", "j", "l", "s", "z"]
+const figure_names = ["i", "o", "t", "j", "l", "s", "z", "g", "y"]
 
 var figure_names_bag
 var next_figure_name
@@ -20,6 +20,11 @@ var locked_blocks
 var figure
 var figure_ghost
 var figure_next
+
+var pause = false
+
+
+
 
 func _ready():
 	init()
@@ -40,7 +45,8 @@ func _on_game_timer_timeout():
 		figure_next.remove_figure()
 		figure_ghost.remove_figure()
 
-		creating_new_figure()
+		if !check_game_over():
+			creating_new_figure()
 
 func creating_new_figure():
 	var choosed_figure = choose_next_figure()
@@ -72,7 +78,22 @@ func choose_next_figure():
 
 	return current_figure_name
 
+func check_game_over():
+	for block in locked_blocks:
+		if block.position.y < top_border:
+			pause = true
+			#game_over = true
 
+			$GameTimer.stop()
+
+			#add_record_in_table()
+
+			#$StartTextureButton.texture_normal = load("res://assets/StartButton.png")
+			#$GameOverPanel.visible = true
+
+			return true
+	
+	return false
 
 
 
@@ -89,56 +110,70 @@ func choose_next_figure():
 
 
 var just_touch
-var touch_position 
+var touch_position
+var fall_check = true
 
 func _input(event):
 	if Input.is_action_pressed("Down"):
-		figure.check_move_down(locked_blocks)
-
-	if Input.is_action_pressed("Right"):
-		figure.check_move_right(locked_blocks)
-		figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
-
-	if Input.is_action_pressed("Left"):
-		figure.check_move_left(locked_blocks)
-		figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
-
-	if Input.is_action_just_pressed("Rotation"):
-		figure.check_move_rotation(locked_blocks, 1)
-		figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
-
-	if Input.is_action_just_pressed("AnotherRotation"):
-		figure.check_move_rotation(locked_blocks, -1)
-		figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
-		
-	if Input.is_action_just_pressed("Fall"):
-		figure.move_fall(locked_blocks)
-
-	if event is InputEventScreenTouch:
-		if !event.is_pressed():
-			if just_touch:
-				figure.check_move_rotation(locked_blocks, 1)
-				figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
-
-		just_touch = true
-		touch_position = event.position
-
-	if event is InputEventScreenDrag:
-		if event.velocity.y >= 3000:
-			figure.move_fall(locked_blocks)
-
-		elif event.position.y - touch_position.y >= Block.block_size:
-			touch_position.y += Block.block_size
+		if !pause:
 			figure.check_move_down(locked_blocks)
 
-		if event.position.x - touch_position.x >= Block.block_size:
-			touch_position.x += Block.block_size
+	if Input.is_action_pressed("Right"):
+		if !pause:
 			figure.check_move_right(locked_blocks)
 			figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
 
-		elif event.position.x - touch_position.x <= -Block.block_size:
-			touch_position.x -= Block.block_size
+	if Input.is_action_pressed("Left"):
+		if !pause:
 			figure.check_move_left(locked_blocks)
 			figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
 
-		just_touch = false
+	if Input.is_action_just_pressed("Rotation"):
+		if !pause:
+			figure.check_move_rotation(locked_blocks, 1)
+			figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+
+	if Input.is_action_just_pressed("AnotherRotation"):
+		if !pause:
+			figure.check_move_rotation(locked_blocks, -1)
+			figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+
+	if Input.is_action_just_pressed("Fall"):
+		if !pause:
+			figure.move_fall(locked_blocks)
+			_on_game_timer_timeout()
+
+	if event is InputEventScreenTouch:
+		if !pause:
+			if !event.is_pressed():
+				if just_touch:
+					figure.check_move_rotation(locked_blocks, 1)
+					figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+				fall_check = true
+
+			just_touch = true
+			touch_position = event.position
+
+	if event is InputEventScreenDrag:
+		if !pause:
+			if event.velocity.y >= 3000:
+				if fall_check:
+					figure.move_fall(locked_blocks)
+					_on_game_timer_timeout()
+					fall_check = false
+
+			elif event.position.y - touch_position.y >= Block.block_size:
+				touch_position.y += Block.block_size
+				figure.check_move_down(locked_blocks)
+
+			if event.position.x - touch_position.x >= Block.block_size:
+				touch_position.x += Block.block_size
+				figure.check_move_right(locked_blocks)
+				figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+
+			elif event.position.x - touch_position.x <= -Block.block_size:
+				touch_position.x -= Block.block_size
+				figure.check_move_left(locked_blocks)
+				figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+
+			just_touch = false
