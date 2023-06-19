@@ -111,7 +111,7 @@ func check_game_over():
 
 var just_touch
 var touch_position
-var fall_check = true
+var fall_check
 
 func _input(event):
 	if Input.is_action_pressed("Down"):
@@ -149,10 +149,10 @@ func _input(event):
 				if just_touch:
 					figure.check_move_rotation(locked_blocks, 1)
 					figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
-				fall_check = true
 
 			just_touch = true
 			touch_position = event.position
+			fall_check = true
 
 	if event is InputEventScreenDrag:
 		if !pause:
