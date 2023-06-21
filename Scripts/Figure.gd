@@ -139,10 +139,7 @@ func check_line_fill(locked_blocks, field_width):
 		locked_blocks = remove_filled_lines(locked_blocks, blocks_indexes_in_filled_lines)
 		move_locked_blocks_down(locked_blocks, filled_lines_coordinates_y)
 
-		#update_score(number_filled_lines)
-		#change_speed(number_filled_lines)
-
-	return locked_blocks
+	return {"locked_blocks":locked_blocks, "number_filled_lines":number_filled_lines}
 
 func remove_filled_lines(locked_blocks, blocks_indexes_in_filled_lines):
 	blocks_indexes_in_filled_lines.sort()
@@ -161,11 +158,6 @@ func move_locked_blocks_down(locked_blocks, filled_lines_coordinates_y):
 		for i in len(locked_blocks):
 			if locked_blocks[i].position.y <= filled_line_coordinate_y:
 				locked_blocks[i].position.y += Block.block_size
-
-
-
-
-
 
 #Move functions
 

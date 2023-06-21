@@ -1,7 +1,7 @@
 extends Node2D
 
 const Block_scene = preload("res://Block.tscn")
-const block_texture = preload("res://Assets/Block.png")
+const block_texture = preload("res://Assets/Sprites/Block.png")
 
 const block_size = 32
 

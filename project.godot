@@ -13,6 +13,7 @@ config_version=5
 config/name="Netris"
 run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.0", "Mobile")
+boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 1)
 
 [autoload]
 
@@ -20,8 +21,8 @@ Block="*res://Scripts/Block.gd"
 
 [display]
 
-window/size/viewport_width=960
-window/size/viewport_height=1280
+window/size/viewport_width=816
+window/size/viewport_height=1344
 
 [dotnet]
 
@@ -29,6 +30,10 @@ project/assembly_name="Netris"
 
 [input]
 
+ui_accept={
+"deadzone": 0.5,
+"events": []
+}
 Rotation={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194320,"physical_keycode":0,"key_label":0,"unicode":0,"echo":false,"script":null)
