@@ -1,12 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://mhodfmyfghx0"]
+[gd_scene load_steps=11 format=3 uid="uid://mhodfmyfghx0"]
 
 [ext_resource type="Script" path="res://Scripts/Main.gd" id="1_3ty82"]
 [ext_resource type="AudioStream" uid="uid://b6g8ixd85mw6h" path="res://Assets/Music/Netris Ost(Bad Ending).mp3" id="2_kkj16"]
 [ext_resource type="Texture2D" uid="uid://cotqpgml1c4ds" path="res://Assets/Sprites/Field.png" id="2_m3uwa"]
+[ext_resource type="Texture2D" uid="uid://c10jiiyvtwisp" path="res://Assets/Sprites/PauseField.png" id="4_22b5h"]
 [ext_resource type="Texture2D" uid="uid://dgmmhnswkgdee" path="res://Assets/Sprites/NextFigureField.png" id="4_dd157"]
 [ext_resource type="FontFile" uid="uid://dm3n8xskwvsho" path="res://Assets/Fonts/Xolonium-Bold.ttf" id="5_0ohkj"]
 [ext_resource type="Texture2D" uid="uid://dmu8si5s4yfe4" path="res://Assets/Sprites/Start.png" id="5_focew"]
 [ext_resource type="Texture2D" uid="uid://dc4o3wn6ruj4p" path="res://Assets/Sprites/SoundOff.png" id="6_bg2gg"]
+[ext_resource type="Texture2D" uid="uid://c1lcwblcp621q" path="res://Assets/Sprites/RecordField.png" id="6_hcqqn"]
 [ext_resource type="Texture2D" uid="uid://c3ehdq44ntk07" path="res://Assets/Sprites/info.png" id="7_eu3jb"]
 
 [node name="Main" type="Node2D"]
@@ -23,7 +25,8 @@ autoplay = true
 [node name="Field" type="Sprite2D" parent="."]
 clip_children = 2
 texture_filter = 1
-position = Vector2(265, 468)
+position = Vector2(394, 694)
+scale = Vector2(1.4, 1.4)
 texture = ExtResource("2_m3uwa")
 
 [node name="PauseField" type="Sprite2D" parent="."]
@@ -31,98 +34,200 @@ visible = false
 z_index = 4
 texture_filter = 1
 position = Vector2(447, 734)
-texture = ExtResource("2_m3uwa")
+texture = ExtResource("4_22b5h")
+
+[node name="InfoField" type="Sprite2D" parent="."]
+visible = false
+z_index = 5
+texture_filter = 1
+position = Vector2(689, 856)
+texture = ExtResource("4_22b5h")
+
+[node name="Info" type="RichTextLabel" parent="InfoField"]
+texture_filter = 1
+offset_left = -141.0
+offset_top = -323.0
+offset_right = 265.0
+offset_bottom = -244.0
+theme_override_fonts/normal_font = ExtResource("5_0ohkj")
+text = "Netris rules:
+
+Figures from 3 or 4 blocks fall from above (the figure that will fall next is shown above the playing field).
+
+When a horizontal line is filled, it disappears bringing 100, 300, 1000 or 1500 points, depending on the number of simultaneously filled lines, the combo counter also affects the number of points, which increases if the lines are destroyed by several figures in a row.
+
+Sometimes coins appear on the field that bring 300 extra points if you put a piece on them.
+
+Every 10 lines destroyed, the level increases, each level increases the falling speed of the figure by 0.5.
+
+You can control the figure with W, A, S, D, Q, E, Space;
+^, <, v, >, Ctrl, Ins;
+NumLock keys or touch screen.
+
+Developer: Neclor
+Music: Remobius
+
+Special thanks:  Girlname, Ldgenius, Ufasoft, Panda"
 
 [node name="NextFigureField" type="Sprite2D" parent="."]
 texture_filter = 1
-position = Vector2(267, 56)
-scale = Vector2(1, 1.148)
+position = Vector2(391, 101)
+scale = Vector2(1.4, 1.4)
 texture = ExtResource("4_dd157")
 
-[node name="Neclor" type="Button" parent="."]
-offset_left = 18.0
-offset_top = 25.0
-offset_right = 77.0
-offset_bottom = 56.0
+[node name="GameOverField" type="Sprite2D" parent="."]
+visible = false
+z_index = 4
+texture_filter = 1
+position = Vector2(394, 429)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("4_dd157")
+
+[node name="GameOver" type="Label" parent="GameOverField"]
+texture_filter = 1
+anchors_preset = -1
+anchor_left = -1.454
+anchor_top = -3.327
+anchor_right = -1.454
+anchor_bottom = -3.327
+offset_left = 133.458
+offset_top = 207.401
+offset_right = 261.458
+offset_bottom = 270.401
+theme_override_fonts/font = ExtResource("5_0ohkj")
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RecordField" type="Sprite2D" parent="GameOverField"]
+texture_filter = 1
+position = Vector2(-1.52588e-05, 173.571)
+texture = ExtResource("6_hcqqn")
+
+[node name="AddRecord" type="Label" parent="GameOverField/RecordField"]
+texture_filter = 1
+offset_left = -76.4286
+offset_top = -47.8571
+offset_right = 76.5714
+offset_bottom = -24.8571
+theme_override_fonts/font = ExtResource("5_0ohkj")
+text = "Add record"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InputName" type="LineEdit" parent="GameOverField/RecordField"]
+texture_filter = 1
+offset_left = -75.0
+offset_top = -18.5714
+offset_right = 86.0
+offset_bottom = 9.42856
+theme_override_fonts/font = ExtResource("5_0ohkj")
+placeholder_text = "Input name"
+
+[node name="AcceptName" type="Button" parent="GameOverField/RecordField"]
+texture_filter = 1
+offset_left = -34.2857
+offset_top = 12.8571
+offset_right = 32.7143
+offset_bottom = 40.8571
 focus_mode = 0
-text = "Neclor"
+theme_override_fonts/font = ExtResource("5_0ohkj")
+text = "ok"
 flat = true
+
+[node name="Neclor" type="LinkButton" parent="."]
+texture_filter = 1
+offset_left = 32.0
+offset_top = 33.0
+offset_right = 100.0
+offset_bottom = 57.0
+theme_override_fonts/font = ExtResource("5_0ohkj")
+text = "Neclor"
+underline = 1
+uri = "https://neclor.ru/"
 
 [node name="PauseButton" type="TextureButton" parent="."]
 texture_filter = 1
-offset_left = 22.0
-offset_top = 113.0
-offset_right = 86.0
-offset_bottom = 177.0
+offset_left = 35.0
+offset_top = 200.0
+offset_right = 122.0
+offset_bottom = 285.0
 texture_normal = ExtResource("5_focew")
 ignore_texture_size = true
 stretch_mode = 0
 
 [node name="SoundButton" type="TextureButton" parent="."]
 texture_filter = 1
-offset_left = 21.0
-offset_top = 212.0
-offset_right = 89.0
-offset_bottom = 277.0
+offset_left = 32.0
+offset_top = 339.0
+offset_right = 118.0
+offset_bottom = 422.0
 texture_normal = ExtResource("6_bg2gg")
 ignore_texture_size = true
 stretch_mode = 0
 
 [node name="InfoButton" type="TextureButton" parent="."]
 texture_filter = 1
-offset_left = 23.0
-offset_top = 307.0
-offset_right = 89.0
-offset_bottom = 370.0
+offset_left = 31.0
+offset_top = 471.0
+offset_right = 116.0
+offset_bottom = 553.0
 texture_normal = ExtResource("7_eu3jb")
 ignore_texture_size = true
 stretch_mode = 0
 
 [node name="Score" type="Label" parent="."]
-offset_left = 358.0
-offset_top = 60.0
-offset_right = 538.0
-offset_bottom = 97.0
+texture_filter = 1
+offset_left = 528.0
+offset_top = 112.0
+offset_right = 708.0
+offset_bottom = 149.0
 theme_override_fonts/font = ExtResource("5_0ohkj")
-text = "Score: 12345"
+text = "Score: 0"
 vertical_alignment = 1
 
 [node name="Combo" type="Label" parent="."]
-offset_left = 364.0
-offset_top = 23.0
-offset_right = 618.0
-offset_bottom = 49.0
+texture_filter = 1
+offset_left = 525.0
+offset_top = 63.0
+offset_right = 779.0
+offset_bottom = 89.0
 theme_override_fonts/font = ExtResource("5_0ohkj")
 text = "x1"
 vertical_alignment = 1
 
 [node name="Speed" type="Label" parent="."]
-offset_left = 438.0
-offset_top = 119.0
-offset_right = 650.0
-offset_bottom = 145.0
+texture_filter = 1
+offset_left = 640.0
+offset_top = 209.0
+offset_right = 852.0
+offset_bottom = 235.0
 theme_override_fonts/font = ExtResource("5_0ohkj")
 text = "Speed: 2"
 vertical_alignment = 1
 
 [node name="Level" type="Label" parent="."]
-offset_left = 439.0
-offset_top = 156.0
-offset_right = 685.0
-offset_bottom = 182.0
+texture_filter = 1
+offset_left = 639.0
+offset_top = 264.0
+offset_right = 885.0
+offset_bottom = 290.0
 theme_override_fonts/font = ExtResource("5_0ohkj")
 text = "Level: 0"
 vertical_alignment = 1
 
 [node name="NumberLines" type="Label" parent="."]
-offset_left = 439.0
-offset_top = 186.0
-offset_right = 672.0
-offset_bottom = 212.0
+texture_filter = 1
+offset_left = 637.0
+offset_top = 309.0
+offset_right = 870.0
+offset_bottom = 335.0
 theme_override_fonts/font = ExtResource("5_0ohkj")
 text = "Lines: 0"
 vertical_alignment = 1
 
 [connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]
+[connection signal="button_down" from="GameOverField/RecordField/AcceptName" to="." method="_on_accept_name_button_down"]
 [connection signal="button_down" from="PauseButton" to="." method="_on_pause_button_button_down"]
 [connection signal="button_down" from="SoundButton" to="." method="_on_sound_button_button_down"]
+[connection signal="button_down" from="InfoButton" to="." method="_on_info_button_button_down"]

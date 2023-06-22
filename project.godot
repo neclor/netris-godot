@@ -13,7 +13,10 @@ config_version=5
 config/name="Netris"
 run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.0", "Mobile")
-boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 1)
+boot_splash/bg_color=Color(0.0627451, 0.0627451, 0.0627451, 1)
+boot_splash/image="res://Assets/Sprites/Coin.png"
+boot_splash/use_filter=false
+config/icon="res://Assets/Sprites/Coin.png"
 
 [autoload]
 
@@ -21,8 +24,8 @@ Block="*res://Scripts/Block.gd"
 
 [display]
 
-window/size/viewport_width=816
-window/size/viewport_height=1344
+window/size/viewport_width=806
+window/size/viewport_height=1254
 
 [dotnet]
 

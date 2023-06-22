@@ -26,6 +26,7 @@ var locked_blocks
 var figure
 var figure_ghost
 var figure_next
+var coin
 
 var pause
 var game_over
@@ -53,10 +54,41 @@ func interface_scaling():
 	$PauseField.position = Vector2(center.x, center.y + block_size * interface_scale)
 	$PauseField.scale /= $PauseField.scale
 	$PauseField.scale *= interface_scale
+	
+	$InfoField.position = Vector2(center.x, center.y + block_size * interface_scale)
+	$InfoField.scale /= $InfoField.scale
+	$InfoField.scale *= interface_scale
+
+	$InfoField/Info.position = Vector2(-(field_width / 2 - 0.5) * block_size, -(field_height / 2 - 0.5) * block_size)
+	$InfoField/Info.size = Vector2((field_width - 1) * block_size, (field_height - 1) * block_size)
+	$InfoField/Info.add_theme_font_size_override("font_size", block_size / 2)
 
 	$NextFigureField.position = Vector2(center.x, center.y - (field_height / 2 + 1) * block_size * interface_scale)
 	$NextFigureField.scale /= $NextFigureField.scale
 	$NextFigureField.scale *= interface_scale
+
+	$GameOverField.position = Vector2(center.x, center.y - 5 * block_size * interface_scale)
+	$GameOverField.scale /= $GameOverField.scale
+	$GameOverField.scale *= interface_scale
+
+	$GameOverField/GameOver.position = Vector2(-2 * block_size, -block_size)
+	$GameOverField/GameOver.size = Vector2(4 * block_size, 2 * block_size)
+	$GameOverField/GameOver.add_theme_font_size_override("font_size", block_size / 2)
+
+	$GameOverField/RecordField.position = Vector2(0, 5.5 * block_size)
+	$GameOverField/RecordField.scale /= $GameOverField/RecordField.scale
+
+	$GameOverField/RecordField/AddRecord.position = Vector2(-2.5 * block_size, -1.5 * block_size)
+	$GameOverField/RecordField/AddRecord.size = Vector2(5 * block_size, block_size)
+	$GameOverField/RecordField/AddRecord.add_theme_font_size_override("font_size", block_size / 2)
+
+	$GameOverField/RecordField/InputName.position = Vector2(-2.5 * block_size, -0.5 * block_size)
+	$GameOverField/RecordField/InputName.size = Vector2(5 * block_size, block_size)
+	$GameOverField/RecordField/InputName.add_theme_font_size_override("font_size", block_size / 2)
+
+	$GameOverField/RecordField/AcceptName.position = Vector2(-block_size, 0.5 * block_size)
+	$GameOverField/RecordField/AcceptName.size = Vector2(2 * block_size, block_size)
+	$GameOverField/RecordField/AcceptName.add_theme_font_size_override("font_size", block_size / 2)
 
 	$Combo.position = Vector2(center.x + (field_width / 2 - 2) * block_size * interface_scale, center.y - (field_height / 2 + 2) * block_size * interface_scale)
 	$Combo.size = Vector2(block_size * interface_scale, block_size * interface_scale)
@@ -78,9 +110,13 @@ func interface_scaling():
 	$NumberLines.size = Vector2(block_size * interface_scale, block_size * interface_scale)
 	$NumberLines.add_theme_font_size_override("font_size", block_size * interface_scale / 2)
 
+	$Neclor.position = Vector2(center.x - (field_width / 2 + 3) * block_size * interface_scale, center.y - (field_height / 2 + 2) * block_size * interface_scale)
+	$Neclor.size = Vector2(2 * block_size * interface_scale, block_size * interface_scale)
+	$Neclor.add_theme_font_size_override("font_size", block_size * interface_scale / 2)
+
 	$PauseButton.position = Vector2(center.x - (field_width / 2 + 3) * block_size * interface_scale, center.y - (field_height / 2 - 1) * block_size * interface_scale)
 	$PauseButton.size = Vector2(2 * block_size * interface_scale, 2 * block_size * interface_scale)
-	
+
 	$SoundButton.position = Vector2(center.x - (field_width / 2 + 3) * block_size * interface_scale, center.y - (field_height / 2 - 4) * block_size * interface_scale)
 	$SoundButton.size = Vector2(2 * block_size * interface_scale, 2 * block_size * interface_scale)
 
@@ -103,10 +139,16 @@ func init():
 	combo_counter = 0.5
 
 	$PauseField.visible = false
+	$GameOverField.visible = false
+	$GameOverField/RecordField.visible = true
 
 func start_game():
 	for block in locked_blocks:
 		block.queue_free()
+
+	if coin != null:
+		coin.remove()
+		coin = null
 
 	init()
 
@@ -129,7 +171,17 @@ func _on_game_timer_timeout():
 
 		locked_blocks = check_line_fill.locked_blocks
 
+		if coin != null:
+			if coin.check_collected(figure.blocks):
+				update_score(2)
+				coin.remove()
+				coin = null
+
 		if check_line_fill.number_filled_lines != 0:
+			if coin != null:
+				coin.remove()
+				coin = null
+
 			update_level(check_line_fill.number_filled_lines)
 			update_score(check_line_fill.number_filled_lines)
 			update_speed()
@@ -148,6 +200,8 @@ func _on_game_timer_timeout():
 			creating_new_figure()
 
 func pause_game():
+	$InfoField.visible = false
+
 	if game_over:
 		start_game()
 
@@ -176,6 +230,20 @@ func pause_music():
 
 		$SoundButton.texture_normal = sound_off_texture
 
+func info():
+	if $InfoField.visible:
+		$InfoField.visible = false
+
+	else:
+		$InfoField.visible = true
+
+		if !game_over:
+			pause = true
+			$GameTimer.stop()
+
+			$PauseField.visible = true
+			$PauseButton.texture_normal = start_texture
+
 #-----------
 
 func creating_new_figure():
@@ -195,6 +263,13 @@ func creating_new_figure():
 	figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
 	for block in figure_ghost.blocks:
 		$Field.add_child(block)
+
+	if coin == null:
+		coin = Coin.new()
+		if coin.check_available_position(locked_blocks, top_border):
+			$Field.add_child(coin.coin)
+		else:
+			coin = null
 
 func choose_next_figure():
 	if figure_names_bag == []:
@@ -250,30 +325,15 @@ func update_speed():
 func update_combo():
 	$Combo.text = "x" + str(combo_counter * 2)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #Сontrol functions
 
 var used_button
 var just_touch
 var touch_position
 var fall_check
+
+func _on_neclor_button_down():
+	pass # Replace with function body.
 
 func _on_pause_button_button_down():
 	used_button = true
@@ -282,6 +342,13 @@ func _on_pause_button_button_down():
 func _on_sound_button_button_down():
 	used_button = true
 	pause_music()
+
+func _on_info_button_button_down():
+	used_button = true
+	info()
+
+func _on_accept_name_button_down():
+	print("dsadadasd")# Replace with function body.
 
 func _input(event):
 	if Input.is_action_just_pressed("Pause"):

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqehykin5ghub"
-path="res://.godot/imported/Coin2.png-848492087643eed018d93abe1ad68ec2.ctex"
+uid="uid://c10jiiyvtwisp"
+path="res://.godot/imported/PauseField.png-a7daf560c18fb7327d1a6d89dcee8f02.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Coin2.png"
-dest_files=["res://.godot/imported/Coin2.png-848492087643eed018d93abe1ad68ec2.ctex"]
+source_file="res://Assets/Sprites/PauseField.png"
+dest_files=["res://.godot/imported/PauseField.png-a7daf560c18fb7327d1a6d89dcee8f02.ctex"]
 
 [params]
 
