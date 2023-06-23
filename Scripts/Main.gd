@@ -35,6 +35,7 @@ var score
 var combo_counter
 var number_lines
 
+var player_name
 #Basic functions
 
 func interface_scaling():
@@ -124,6 +125,8 @@ func interface_scaling():
 	$InfoButton.size = Vector2(2 * block_size * interface_scale, 2 * block_size * interface_scale)
 
 func _ready():
+	player_name = ""
+
 	init()
 	interface_scaling()
 
@@ -139,8 +142,9 @@ func init():
 	combo_counter = 0.5
 
 	$PauseField.visible = false
+	$InfoField.visible = false
 	$GameOverField.visible = false
-	$GameOverField/RecordField.visible = true
+	$GameOverField/RecordField.visible = false
 
 func start_game():
 	for block in locked_blocks:
@@ -294,6 +298,8 @@ func check_game_over():
 
 			$PauseButton.texture_normal = start_texture
 
+			add_record()
+
 			return true
 	return false
 
@@ -325,15 +331,33 @@ func update_speed():
 func update_combo():
 	$Combo.text = "x" + str(combo_counter * 2)
 
+func add_record():
+	if score != 0:
+		if player_name == "":
+			$GameOverField/RecordField.visible = true
+		else:
+			$GameOverField/RecordField/HTTPRequest.request_completed.connect(self.http_request_completed)
+			$GameOverField/RecordField/HTTPRequest.request("https://neclor.ru/Records?name=%s&score=%d" % [player_name, score], \
+				[], HTTPClient.METHOD_POST, '{}')
+
+func parse_http_headers(headers: Array) -> Dictionary:
+	var result = {}
+	for header in headers:
+		var parts = header.split(":")
+		if parts.size() >= 2:
+			result[parts[0].strip_edges()] = parts[1]
+	return result
+
+func http_request_completed(result, response_code, headers, body):
+	if response_code != 200:
+		OS.alert(parse_http_headers(headers)["X-Message"])
+
 #Сontrol functions
 
 var used_button
 var just_touch
 var touch_position
 var fall_check
-
-func _on_neclor_button_down():
-	pass # Replace with function body.
 
 func _on_pause_button_button_down():
 	used_button = true
@@ -348,7 +372,8 @@ func _on_info_button_button_down():
 	info()
 
 func _on_accept_name_button_down():
-	print("dsadadasd")# Replace with function body.
+	player_name = $GameOverField/RecordField/InputName.text
+	add_record()
 
 func _input(event):
 	if Input.is_action_just_pressed("Pause"):

@@ -135,6 +135,8 @@ theme_override_fonts/font = ExtResource("5_0ohkj")
 text = "ok"
 flat = true
 
+[node name="HTTPRequest" type="HTTPRequest" parent="GameOverField/RecordField"]
+
 [node name="Neclor" type="LinkButton" parent="."]
 texture_filter = 1
 offset_left = 32.0
