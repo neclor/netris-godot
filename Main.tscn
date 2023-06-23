@@ -67,7 +67,7 @@ NumLock keys or touch screen.
 Developer: Neclor
 Music: Remobius
 
-Special thanks:  Girlname, Ldgenius, Ufasoft, Panda"
+Special thanks: Ufasoft, Girlname, Ldgenius, Panda"
 
 [node name="NextFigureField" type="Sprite2D" parent="."]
 texture_filter = 1
