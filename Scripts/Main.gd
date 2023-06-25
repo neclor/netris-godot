@@ -91,6 +91,21 @@ func interface_scaling():
 	$GameOverField/RecordField/AcceptName.size = Vector2(2 * block_size, block_size)
 	$GameOverField/RecordField/AcceptName.add_theme_font_size_override("font_size", block_size / 2)
 
+	$GameOverField/RecordField/ErrorField.position = Vector2(0, 0)
+	$GameOverField/RecordField/ErrorField.scale /= $GameOverField/RecordField/ErrorField.scale
+
+	$GameOverField/RecordField/ErrorField/Error.position = Vector2(-3 * block_size, -1.5 * block_size)
+	$GameOverField/RecordField/ErrorField/Error.size = Vector2(6 * block_size, 1.5 * block_size)
+	$GameOverField/RecordField/ErrorField/Error.add_theme_font_size_override("font_size", block_size / 2)
+
+	$GameOverField/RecordField/ErrorField/EnterAnotherName.position = Vector2(-3 * block_size, 0)
+	$GameOverField/RecordField/ErrorField/EnterAnotherName.size = Vector2(4 * block_size, 1.5 * block_size)
+	$GameOverField/RecordField/ErrorField/EnterAnotherName.add_theme_font_size_override("font_size", block_size / 2)
+
+	$GameOverField/RecordField/ErrorField/SaveName.position = Vector2(block_size, 0)
+	$GameOverField/RecordField/ErrorField/SaveName.size = Vector2(2 * block_size, 1.5 * block_size)
+	$GameOverField/RecordField/ErrorField/SaveName.add_theme_font_size_override("font_size", block_size / 2)
+
 	$Combo.position = Vector2(center.x + (field_width / 2 - 2) * block_size * interface_scale, center.y - (field_height / 2 + 2) * block_size * interface_scale)
 	$Combo.size = Vector2(block_size * interface_scale, block_size * interface_scale)
 	$Combo.add_theme_font_size_override("font_size", block_size * interface_scale / 2)
@@ -145,6 +160,7 @@ func init():
 	$InfoField.visible = false
 	$GameOverField.visible = false
 	$GameOverField/RecordField.visible = false
+	$GameOverField/RecordField/ErrorField.visible = false
 
 func start_game():
 	for block in locked_blocks:
@@ -163,9 +179,9 @@ func start_game():
 	game_over = false
 	$GameTimer.start()
 
-	$Music.volume_db = 0
-
+	$GameOverField.visible = false
 	$PauseButton.texture_normal = pause_texture
+	$Music.volume_db = 0
 
 func _on_game_timer_timeout():
 	if !figure.check_move_down(locked_blocks):
@@ -294,9 +310,9 @@ func check_game_over():
 			game_over = true
 			$GameTimer.stop()
 
-			$Music.volume_db = -10
-
+			$GameOverField.visible = true
 			$PauseButton.texture_normal = start_texture
+			$Music.volume_db = -10
 
 			add_record()
 
@@ -335,10 +351,13 @@ func add_record():
 	if score != 0:
 		if player_name == "":
 			$GameOverField/RecordField.visible = true
+
 		else:
 			$GameOverField/RecordField/HTTPRequest.request_completed.connect(self.http_request_completed)
 			$GameOverField/RecordField/HTTPRequest.request("https://neclor.ru/Records?name=%s&score=%d" % [player_name, score], \
 				[], HTTPClient.METHOD_POST, '{}')
+
+			start_game()
 
 func parse_http_headers(headers: Array) -> Dictionary:
 	var result = {}
@@ -349,8 +368,11 @@ func parse_http_headers(headers: Array) -> Dictionary:
 	return result
 
 func http_request_completed(result, response_code, headers, body):
-	if response_code != 200:
-		OS.alert(parse_http_headers(headers)["X-Message"])
+	if response_code == 200:
+		start_game()
+
+	else:
+		$GameOverField/RecordField/ErrorField.visible = true
 
 #Сontrol functions
 
@@ -374,6 +396,12 @@ func _on_info_button_button_down():
 func _on_accept_name_button_down():
 	player_name = $GameOverField/RecordField/InputName.text
 	add_record()
+
+func _on_enter_another_name_button_down():
+	$GameOverField/RecordField/ErrorField.visible = false
+
+func _on_save_name_button_down():
+	start_game()
 
 func _input(event):
 	if Input.is_action_just_pressed("Pause"):

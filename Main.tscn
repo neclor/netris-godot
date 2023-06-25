@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://mhodfmyfghx0"]
 
 [ext_resource type="Script" path="res://Scripts/Main.gd" id="1_3ty82"]
-[ext_resource type="AudioStream" uid="uid://b6g8ixd85mw6h" path="res://Assets/Music/Netris Ost(Bad Ending).mp3" id="2_kkj16"]
+[ext_resource type="AudioStream" uid="uid://df6ssujw5pat8" path="res://Assets/Music/Netris_ost.mp3" id="2_217kw"]
 [ext_resource type="Texture2D" uid="uid://cotqpgml1c4ds" path="res://Assets/Sprites/Field.png" id="2_m3uwa"]
 [ext_resource type="Texture2D" uid="uid://c10jiiyvtwisp" path="res://Assets/Sprites/PauseField.png" id="4_22b5h"]
 [ext_resource type="Texture2D" uid="uid://dgmmhnswkgdee" path="res://Assets/Sprites/NextFigureField.png" id="4_dd157"]
@@ -18,7 +18,7 @@ script = ExtResource("1_3ty82")
 wait_time = 0.5
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_kkj16")
+stream = ExtResource("2_217kw")
 volume_db = -10.0
 autoplay = true
 
@@ -50,7 +50,7 @@ offset_top = -323.0
 offset_right = 265.0
 offset_bottom = -244.0
 theme_override_fonts/normal_font = ExtResource("5_0ohkj")
-text = "Netris rules:
+text = "Description:
 
 Figures from 3 or 4 blocks fall from above (the figure that will fall next is shown above the playing field).
 
@@ -76,8 +76,7 @@ scale = Vector2(1.4, 1.4)
 texture = ExtResource("4_dd157")
 
 [node name="GameOverField" type="Sprite2D" parent="."]
-visible = false
-z_index = 4
+z_index = 10
 texture_filter = 1
 position = Vector2(394, 429)
 scale = Vector2(1.4, 1.4)
@@ -104,12 +103,51 @@ texture_filter = 1
 position = Vector2(-1.52588e-05, 173.571)
 texture = ExtResource("6_hcqqn")
 
+[node name="ErrorField" type="Sprite2D" parent="GameOverField/RecordField"]
+z_index = 1
+texture_filter = 1
+position = Vector2(312.143, 29.2862)
+scale = Vector2(1, 0.998626)
+texture = ExtResource("6_hcqqn")
+
+[node name="Error" type="Label" parent="GameOverField/RecordField/ErrorField"]
+texture_filter = 1
+offset_left = -96.0
+offset_top = -48.0
+offset_right = 96.0
+offset_bottom = 1.0
+theme_override_fonts/font = ExtResource("5_0ohkj")
+text = "This name is 
+already taken!"
+horizontal_alignment = 1
+
+[node name="EnterAnotherName" type="Button" parent="GameOverField/RecordField/ErrorField"]
+offset_left = -96.4286
+offset_top = -0.71524
+offset_right = 31.5714
+offset_bottom = 47.2848
+focus_mode = 0
+theme_override_fonts/font = ExtResource("5_0ohkj")
+text = "enter another 
+name"
+flat = true
+
+[node name="SaveName" type="Button" parent="GameOverField/RecordField/ErrorField"]
+offset_left = 35.7143
+offset_top = 5.00687
+offset_right = 93.7143
+offset_bottom = 49.0069
+focus_mode = 0
+theme_override_fonts/font = ExtResource("5_0ohkj")
+text = "ok"
+flat = true
+
 [node name="AddRecord" type="Label" parent="GameOverField/RecordField"]
 texture_filter = 1
 offset_left = -76.4286
-offset_top = -47.8571
+offset_top = -42.1424
 offset_right = 76.5714
-offset_bottom = -24.8571
+offset_bottom = -19.1424
 theme_override_fonts/font = ExtResource("5_0ohkj")
 text = "Add record"
 horizontal_alignment = 1
@@ -117,12 +155,12 @@ vertical_alignment = 1
 
 [node name="InputName" type="LineEdit" parent="GameOverField/RecordField"]
 texture_filter = 1
-offset_left = -75.0
-offset_top = -18.5714
-offset_right = 86.0
-offset_bottom = 9.42856
+offset_left = -81.4286
+offset_top = -17.1424
+offset_right = 79.5714
+offset_bottom = 10.8576
 theme_override_fonts/font = ExtResource("5_0ohkj")
-placeholder_text = "Input name"
+placeholder_text = "Enter name"
 
 [node name="AcceptName" type="Button" parent="GameOverField/RecordField"]
 texture_filter = 1
@@ -229,6 +267,8 @@ text = "Lines: 0"
 vertical_alignment = 1
 
 [connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]
+[connection signal="button_down" from="GameOverField/RecordField/ErrorField/EnterAnotherName" to="." method="_on_enter_another_name_button_down"]
+[connection signal="button_down" from="GameOverField/RecordField/ErrorField/SaveName" to="." method="_on_save_name_button_down"]
 [connection signal="button_down" from="GameOverField/RecordField/AcceptName" to="." method="_on_accept_name_button_down"]
 [connection signal="button_down" from="PauseButton" to="." method="_on_pause_button_button_down"]
 [connection signal="button_down" from="SoundButton" to="." method="_on_sound_button_button_down"]
