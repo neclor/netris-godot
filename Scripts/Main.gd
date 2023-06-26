@@ -161,6 +161,12 @@ func init():
 	$GameOverField.visible = false
 	$GameOverField/RecordField.visible = false
 	$GameOverField/RecordField/ErrorField.visible = false
+	$GameOverField/RecordField/ErrorField/EnterAnotherName.visible = true
+
+	update_level(0)
+	update_score(0)
+	update_speed()
+	update_combo()
 
 func start_game():
 	for block in locked_blocks:
@@ -179,7 +185,6 @@ func start_game():
 	game_over = false
 	$GameTimer.start()
 
-	$GameOverField.visible = false
 	$PauseButton.texture_normal = pause_texture
 	$Music.volume_db = 0
 
@@ -213,8 +218,8 @@ func _on_game_timer_timeout():
 
 		update_combo()
 
-		figure_next.remove_figure()
-		figure_ghost.remove_figure()
+		figure_next.remove()
+		figure_ghost.remove()
 
 		if !check_game_over():
 			creating_new_figure()
@@ -357,8 +362,6 @@ func add_record():
 			$GameOverField/RecordField/HTTPRequest.request("https://neclor.ru/Records?name=%s&score=%d" % [player_name, score], \
 				[], HTTPClient.METHOD_POST, '{}')
 
-			start_game()
-
 func parse_http_headers(headers: Array) -> Dictionary:
 	var result = {}
 	for header in headers:
@@ -367,11 +370,18 @@ func parse_http_headers(headers: Array) -> Dictionary:
 			result[parts[0].strip_edges()] = parts[1]
 	return result
 
-func http_request_completed(result, response_code, headers, body):
+func http_request_completed(response_code, headers):
 	if response_code == 200:
 		start_game()
 
+	elif response_code == 304:
+		$GameOverField/RecordField/ErrorField/Error.text = "This name is
+already taken!"
+		$GameOverField/RecordField/ErrorField.visible = true
+
 	else:
+		$GameOverField/RecordField/ErrorField/Error.text = parse_http_headers(headers)['x-message']
+		$GameOverField/RecordField/ErrorField/EnterAnotherName.visible = false
 		$GameOverField/RecordField/ErrorField.visible = true
 
 #Сontrol functions
@@ -407,7 +417,7 @@ func _input(event):
 	if Input.is_action_just_pressed("Pause"):
 			pause_game()
 
-	if !pause and !used_button:
+	if !pause:
 		if Input.is_action_pressed("Down"):
 			figure.check_move_down(locked_blocks)
 
@@ -431,37 +441,37 @@ func _input(event):
 			figure.move_fall(locked_blocks)
 			_on_game_timer_timeout()
 
-		if event is InputEventScreenTouch:
-			if !event.is_pressed():
-				if just_touch:
-					figure.check_move_rotation(locked_blocks, 1)
+		if !used_button:
+			if event is InputEventScreenTouch:
+				if !event.is_pressed():
+					if just_touch:
+						figure.check_move_rotation(locked_blocks, 1)
+						figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
+
+				just_touch = true
+				touch_position = event.position
+				fall_check = true
+
+			if event is InputEventScreenDrag:
+				if event.velocity.y >= 3000:
+					if fall_check:
+						figure.move_fall(locked_blocks)
+						_on_game_timer_timeout()
+						fall_check = false
+
+				elif event.position.y - touch_position.y >= Block.block_size:
+					touch_position.y += Block.block_size
+					figure.check_move_down(locked_blocks)
+
+				if event.position.x - touch_position.x >= Block.block_size:
+					touch_position.x += Block.block_size
+					figure.check_move_right(locked_blocks)
 					figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
 
-			just_touch = true
-			touch_position = event.position
-			fall_check = true
+				elif event.position.x - touch_position.x <= -Block.block_size:
+					touch_position.x -= Block.block_size
+					figure.check_move_left(locked_blocks)
+					figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
 
-		if event is InputEventScreenDrag:
-			if event.velocity.y >= 3000:
-				if fall_check:
-					figure.move_fall(locked_blocks)
-					_on_game_timer_timeout()
-					fall_check = false
-
-			elif event.position.y - touch_position.y >= Block.block_size:
-				touch_position.y += Block.block_size
-				figure.check_move_down(locked_blocks)
-
-			if event.position.x - touch_position.x >= Block.block_size:
-				touch_position.x += Block.block_size
-				figure.check_move_right(locked_blocks)
-				figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
-
-			elif event.position.x - touch_position.x <= -Block.block_size:
-				touch_position.x -= Block.block_size
-				figure.check_move_left(locked_blocks)
-				figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
-
-			just_touch = false
-
-	used_button = false
+				just_touch = false
+			used_button = false

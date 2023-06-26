@@ -57,7 +57,7 @@ func update_blocks_coordinates():
 	for i in len(blocks):
 		blocks[i].position = blocks_coordinates[i] + coordinates
 
-func remove_figure():
+func remove():
 	for block in blocks:
 		block.queue_free()
 

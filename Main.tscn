@@ -76,7 +76,7 @@ scale = Vector2(1.4, 1.4)
 texture = ExtResource("4_dd157")
 
 [node name="GameOverField" type="Sprite2D" parent="."]
-z_index = 10
+z_index = 4
 texture_filter = 1
 position = Vector2(394, 429)
 scale = Vector2(1.4, 1.4)
@@ -117,7 +117,7 @@ offset_top = -48.0
 offset_right = 96.0
 offset_bottom = 1.0
 theme_override_fonts/font = ExtResource("5_0ohkj")
-text = "This name is 
+text = "This name is
 already taken!"
 horizontal_alignment = 1
 
@@ -184,7 +184,7 @@ offset_bottom = 57.0
 theme_override_fonts/font = ExtResource("5_0ohkj")
 text = "Neclor"
 underline = 1
-uri = "https://neclor.ru/"
+uri = "index.html"
 
 [node name="PauseButton" type="TextureButton" parent="."]
 texture_filter = 1
