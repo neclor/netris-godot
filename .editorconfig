@@ -2,7 +2,6 @@
 end_of_line = lf
 insert_final_newline = true
 
-# Matches multiple files with brace expansion notation
 [*.{gd}]
 charset = utf-8
 indent_style = tab
