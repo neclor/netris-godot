@@ -377,7 +377,7 @@ func http_request_completed(result, response_code, headers, body):
 			start_game()
 
 		304:
-			$GameOverField/RecordField/ErrorField/Error.text = "This name is already taken!"
+			$GameOverField/RecordField/ErrorField/Error.text = "This name is\nalready taken!"
 			$GameOverField/RecordField/ErrorField.visible = true
 
 		_:
