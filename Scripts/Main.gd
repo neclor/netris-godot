@@ -94,18 +94,21 @@ func interface_scaling():
 
 	$GameOverField/RecordField/ErrorField.position = Vector2(0, 0)
 	$GameOverField/RecordField/ErrorField.scale /= $GameOverField/RecordField/ErrorField.scale
+	
+	$GameOverField/RecordField/ErrorField/ErrorPanel.position = Vector2(-3 * block_size, -1.5 * block_size)
+	$GameOverField/RecordField/ErrorField/ErrorPanel.size = Vector2(6 * block_size, 3 * block_size)
 
-	$GameOverField/RecordField/ErrorField/Error.position = Vector2(-3 * block_size, -1.5 * block_size)
-	$GameOverField/RecordField/ErrorField/Error.size = Vector2(6 * block_size, 1.5 * block_size)
-	$GameOverField/RecordField/ErrorField/Error.add_theme_font_size_override("font_size", block_size / 2)
+	$GameOverField/RecordField/ErrorField/ErrorPanel/Error.position = Vector2(0, 0)
+	$GameOverField/RecordField/ErrorField/ErrorPanel/Error.size = Vector2(6 * block_size, 1.5 * block_size)
+	$GameOverField/RecordField/ErrorField/ErrorPanel/Error.add_theme_font_size_override("font_size", block_size / 2)
 
-	$GameOverField/RecordField/ErrorField/EnterAnotherName.position = Vector2(-3 * block_size, 0)
-	$GameOverField/RecordField/ErrorField/EnterAnotherName.size = Vector2(4 * block_size, 1.5 * block_size)
-	$GameOverField/RecordField/ErrorField/EnterAnotherName.add_theme_font_size_override("font_size", block_size / 2)
+	$GameOverField/RecordField/ErrorField/ErrorPanel/EnterAnotherName.position = Vector2(0, 1.5 * block_size)
+	$GameOverField/RecordField/ErrorField/ErrorPanel/EnterAnotherName.size = Vector2(4 * block_size, 1.5 * block_size)
+	$GameOverField/RecordField/ErrorField/ErrorPanel/EnterAnotherName.add_theme_font_size_override("font_size", block_size / 2)
 
-	$GameOverField/RecordField/ErrorField/SaveName.position = Vector2(block_size, 0)
-	$GameOverField/RecordField/ErrorField/SaveName.size = Vector2(2 * block_size, 1.5 * block_size)
-	$GameOverField/RecordField/ErrorField/SaveName.add_theme_font_size_override("font_size", block_size / 2)
+	$GameOverField/RecordField/ErrorField/ErrorPanel/SaveName.position = Vector2(4 * block_size, 1.5 * block_size)
+	$GameOverField/RecordField/ErrorField/ErrorPanel/SaveName.size = Vector2(2 * block_size, 1.5 * block_size)
+	$GameOverField/RecordField/ErrorField/ErrorPanel/SaveName.add_theme_font_size_override("font_size", block_size / 2)
 
 	$Combo.position = Vector2(center.x + (field_width / 2 - 2) * block_size * interface_scale, center.y - (field_height / 2 + 2) * block_size * interface_scale)
 	$Combo.size = Vector2(block_size * interface_scale, block_size * interface_scale)
@@ -162,7 +165,7 @@ func init():
 	$GameOverField.visible = false
 	$GameOverField/RecordField.visible = false
 	$GameOverField/RecordField/ErrorField.visible = false
-	$GameOverField/RecordField/ErrorField/EnterAnotherName.visible = true
+	$GameOverField/RecordField/ErrorField/ErrorPanel/EnterAnotherName.visible = true
 
 	update_level(0)
 	update_score(0)
@@ -377,12 +380,12 @@ func http_request_completed(result, response_code, headers, body):
 			start_game()
 
 		304:
-			$GameOverField/RecordField/ErrorField/Error.text = "This name is\nalready taken!"
+			$GameOverField/RecordField/ErrorField/ErrorPanel/Error.text = "This name is\nalready taken!"
 			$GameOverField/RecordField/ErrorField.visible = true
 
 		_:
-			$GameOverField/RecordField/ErrorField/Error.text = parse_http_headers(headers)['x-message']
-			$GameOverField/RecordField/ErrorField/EnterAnotherName.visible = false
+			$GameOverField/RecordField/ErrorField/ErrorPanel/Error.text = parse_http_headers(headers)['x-message']
+			$GameOverField/RecordField/ErrorField/ErrorPanel/EnterAnotherName.visible = false
 			$GameOverField/RecordField/ErrorField.visible = true
 
 #Сontrol functions

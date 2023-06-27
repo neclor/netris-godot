@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://mhodfmyfghx0"]
+[gd_scene load_steps=12 format=3 uid="uid://mhodfmyfghx0"]
 
 [ext_resource type="Script" path="res://Scripts/Main.gd" id="1_3ty82"]
 [ext_resource type="AudioStream" uid="uid://df6ssujw5pat8" path="res://Assets/Music/Netris_ost.mp3" id="2_217kw"]
@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://dc4o3wn6ruj4p" path="res://Assets/Sprites/SoundOff.png" id="6_bg2gg"]
 [ext_resource type="Texture2D" uid="uid://c1lcwblcp621q" path="res://Assets/Sprites/RecordField.png" id="6_hcqqn"]
 [ext_resource type="Texture2D" uid="uid://c3ehdq44ntk07" path="res://Assets/Sprites/info.png" id="7_eu3jb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oigue"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_3ty82")
@@ -103,45 +105,6 @@ texture_filter = 1
 position = Vector2(-1.52588e-05, 173.571)
 texture = ExtResource("6_hcqqn")
 
-[node name="ErrorField" type="Sprite2D" parent="GameOverField/RecordField"]
-z_index = 1
-texture_filter = 1
-position = Vector2(312.143, 29.2862)
-scale = Vector2(1, 0.998626)
-texture = ExtResource("6_hcqqn")
-
-[node name="Error" type="Label" parent="GameOverField/RecordField/ErrorField"]
-texture_filter = 1
-offset_left = -96.0
-offset_top = -48.0
-offset_right = 96.0
-offset_bottom = 1.0
-theme_override_fonts/font = ExtResource("5_0ohkj")
-text = "This name is
-already taken!"
-horizontal_alignment = 1
-
-[node name="EnterAnotherName" type="Button" parent="GameOverField/RecordField/ErrorField"]
-offset_left = -96.4286
-offset_top = -0.71524
-offset_right = 31.5714
-offset_bottom = 47.2848
-focus_mode = 0
-theme_override_fonts/font = ExtResource("5_0ohkj")
-text = "enter another 
-name"
-flat = true
-
-[node name="SaveName" type="Button" parent="GameOverField/RecordField/ErrorField"]
-offset_left = 35.7143
-offset_top = 5.00687
-offset_right = 93.7143
-offset_bottom = 49.0069
-focus_mode = 0
-theme_override_fonts/font = ExtResource("5_0ohkj")
-text = "ok"
-flat = true
-
 [node name="AddRecord" type="Label" parent="GameOverField/RecordField"]
 texture_filter = 1
 offset_left = -76.4286
@@ -155,19 +118,65 @@ vertical_alignment = 1
 
 [node name="InputName" type="LineEdit" parent="GameOverField/RecordField"]
 texture_filter = 1
-offset_left = -81.4286
-offset_top = -17.1424
-offset_right = 79.5714
-offset_bottom = 10.8576
+offset_left = -83.5714
+offset_top = -15.7138
+offset_right = 77.4286
+offset_bottom = 12.2862
 theme_override_fonts/font = ExtResource("5_0ohkj")
 placeholder_text = "Enter name"
 
 [node name="AcceptName" type="Button" parent="GameOverField/RecordField"]
 texture_filter = 1
-offset_left = -34.2857
-offset_top = 12.8571
-offset_right = 32.7143
-offset_bottom = 40.8571
+offset_left = -41.4286
+offset_top = 15.7147
+offset_right = 25.5714
+offset_bottom = 43.7147
+focus_mode = 0
+theme_override_fonts/font = ExtResource("5_0ohkj")
+text = "ok"
+flat = true
+
+[node name="ErrorField" type="Sprite2D" parent="GameOverField/RecordField"]
+z_index = 1
+texture_filter = 1
+position = Vector2(312.143, 29.2862)
+scale = Vector2(1, 0.998626)
+texture = ExtResource("6_hcqqn")
+
+[node name="ErrorPanel" type="Panel" parent="GameOverField/RecordField/ErrorField"]
+texture_filter = 1
+offset_left = -94.2859
+offset_top = -46.4925
+offset_right = 94.7141
+offset_bottom = 45.5075
+theme_override_styles/panel = SubResource("StyleBoxEmpty_oigue")
+
+[node name="Error" type="Label" parent="GameOverField/RecordField/ErrorField/ErrorPanel"]
+texture_filter = 1
+offset_left = -2.14285
+offset_right = 189.857
+offset_bottom = 49.0
+theme_override_fonts/font = ExtResource("5_0ohkj")
+text = "This name is
+already taken!"
+horizontal_alignment = 1
+
+[node name="EnterAnotherName" type="Button" parent="GameOverField/RecordField/ErrorField/ErrorPanel"]
+offset_left = -1.71414
+offset_top = 45.4925
+offset_right = 126.286
+offset_bottom = 93.4925
+focus_mode = 0
+theme_override_fonts/font = ExtResource("5_0ohkj")
+text = "enter another 
+name"
+flat = true
+
+[node name="SaveName" type="Button" parent="GameOverField/RecordField/ErrorField/ErrorPanel"]
+offset_left = 130.0
+offset_top = 51.4994
+offset_right = 188.0
+offset_bottom = 95.4994
 focus_mode = 0
 theme_override_fonts/font = ExtResource("5_0ohkj")
 text = "ok"
@@ -267,9 +276,9 @@ text = "Lines: 0"
 vertical_alignment = 1
 
 [connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]
-[connection signal="button_down" from="GameOverField/RecordField/ErrorField/EnterAnotherName" to="." method="_on_enter_another_name_button_down"]
-[connection signal="button_down" from="GameOverField/RecordField/ErrorField/SaveName" to="." method="_on_save_name_button_down"]
 [connection signal="button_down" from="GameOverField/RecordField/AcceptName" to="." method="_on_accept_name_button_down"]
+[connection signal="button_down" from="GameOverField/RecordField/ErrorField/ErrorPanel/EnterAnotherName" to="." method="_on_enter_another_name_button_down"]
+[connection signal="button_down" from="GameOverField/RecordField/ErrorField/ErrorPanel/SaveName" to="." method="_on_save_name_button_down"]
 [connection signal="button_down" from="PauseButton" to="." method="_on_pause_button_button_down"]
 [connection signal="button_down" from="SoundButton" to="." method="_on_sound_button_button_down"]
 [connection signal="button_down" from="InfoButton" to="." method="_on_info_button_button_down"]
