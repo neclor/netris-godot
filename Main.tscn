@@ -184,7 +184,7 @@ offset_bottom = 57.0
 theme_override_fonts/font = ExtResource("5_0ohkj")
 text = "Neclor"
 underline = 1
-uri = "index.html"
+uri = "/index.html"
 
 [node name="PauseButton" type="TextureButton" parent="."]
 texture_filter = 1

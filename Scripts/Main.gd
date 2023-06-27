@@ -36,6 +36,7 @@ var combo_counter
 var number_lines
 
 var player_name
+
 #Basic functions
 
 func interface_scaling():
@@ -269,7 +270,7 @@ func info():
 			$PauseField.visible = true
 			$PauseButton.texture_normal = start_texture
 
-#-----------
+#------ functions
 
 func creating_new_figure():
 	var choosed_figure = choose_next_figure()
@@ -374,9 +375,11 @@ func http_request_completed(result, response_code, headers, body):
 	match response_code:
 		200:
 			start_game()
+
 		304:
 			$GameOverField/RecordField/ErrorField/Error.text = "This name is already taken!"
 			$GameOverField/RecordField/ErrorField.visible = true
+
 		_:
 			$GameOverField/RecordField/ErrorField/Error.text = parse_http_headers(headers)['x-message']
 			$GameOverField/RecordField/ErrorField/EnterAnotherName.visible = false
