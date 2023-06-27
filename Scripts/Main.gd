@@ -370,7 +370,7 @@ func parse_http_headers(headers: Array) -> Dictionary:
 			result[parts[0].strip_edges()] = parts[1]
 	return result
 
-func http_request_completed(response_code, headers):
+func http_request_completed(result, response_code, headers, body):
 	if response_code == 200:
 		start_game()
 
