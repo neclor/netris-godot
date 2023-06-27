@@ -371,18 +371,16 @@ func parse_http_headers(headers: Array) -> Dictionary:
 	return result
 
 func http_request_completed(result, response_code, headers, body):
-	if response_code == 200:
-		start_game()
-
-	elif response_code == 304:
-		$GameOverField/RecordField/ErrorField/Error.text = "This name is
-already taken!"
-		$GameOverField/RecordField/ErrorField.visible = true
-
-	else:
-		$GameOverField/RecordField/ErrorField/Error.text = parse_http_headers(headers)['x-message']
-		$GameOverField/RecordField/ErrorField/EnterAnotherName.visible = false
-		$GameOverField/RecordField/ErrorField.visible = true
+	match response_code:
+		200:
+			start_game()
+		304:
+			$GameOverField/RecordField/ErrorField/Error.text = "This name is already taken!"
+			$GameOverField/RecordField/ErrorField.visible = true
+		_:
+			$GameOverField/RecordField/ErrorField/Error.text = parse_http_headers(headers)['x-message']
+			$GameOverField/RecordField/ErrorField/EnterAnotherName.visible = false
+			$GameOverField/RecordField/ErrorField.visible = true
 
 #Сontrol functions
 
