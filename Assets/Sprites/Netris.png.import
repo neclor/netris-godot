@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ln81b6vwu2hp"
-path="res://.godot/imported/Coin.png-e80fc66f97e62b9817b5f985793b68f0.ctex"
+uid="uid://dytc4pfy6c1c8"
+path="res://.godot/imported/Netris.png-dc517244f9a5935b4c893e5d218f5744.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Coin.png"
-dest_files=["res://.godot/imported/Coin.png-e80fc66f97e62b9817b5f985793b68f0.ctex"]
+source_file="res://Assets/Sprites/Netris.png"
+dest_files=["res://.godot/imported/Netris.png-dc517244f9a5935b4c893e5d218f5744.ctex"]
 
 [params]
 

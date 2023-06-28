@@ -1,21 +1,21 @@
 extends Node
-class_name Coin
+class_name Plus
 
-const coin_texture = preload("res://Assets/Sprites/Coin.png")
+const plus_texture = preload("res://Assets/Sprites/Plus.png")
 
-var coin
+var plus
 
 func _init():
-	coin = Block.Block_scene.instantiate()
+	plus = Block.Block_scene.instantiate()
 
-	var coin_sprite = coin.get_node("Block")
-	coin_sprite.texture = coin_texture
+	var plus_sprite = plus.get_node("Block")
+	plus_sprite.texture = plus_texture
 
-	coin.z_index = 1
+	plus.z_index = 1
 
 func check_collected(blocks):
 	for block in blocks:
-		if block.position == coin.position:
+		if block.position == plus.position:
 			return true
 
 	return false
@@ -36,10 +36,10 @@ func check_available_position(locked_blocks, top_border):
 			available_positions.append(block_above)
 
 	if len(available_positions) != 0:
-		coin.position = available_positions[randi_range(0, len(available_positions) - 1)]
+		plus.position = available_positions[randi_range(0, len(available_positions) - 1)]
 		return true
 
 	return false
 
 func remove():
-	coin.queue_free()
+	plus.queue_free()

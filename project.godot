@@ -14,9 +14,8 @@ config/name="Netris"
 run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.0", "Mobile")
 boot_splash/bg_color=Color(0.0627451, 0.0627451, 0.0627451, 1)
-boot_splash/image="res://Assets/Sprites/Coin.png"
+boot_splash/image="res://Assets/Sprites/Netris.png"
 boot_splash/use_filter=false
-config/icon="res://Assets/Sprites/Coin.png"
 
 [autoload]
 
@@ -162,6 +161,6 @@ pointing/emulate_touch_from_mouse=true
 
 [rendering]
 
-renderer/rendering_method="mobile"
+renderer/rendering_method="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0.0627451, 0.0627451, 0.0627451, 1)

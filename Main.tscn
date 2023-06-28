@@ -39,18 +39,17 @@ position = Vector2(447, 734)
 texture = ExtResource("4_22b5h")
 
 [node name="InfoField" type="Sprite2D" parent="."]
-visible = false
 z_index = 5
 texture_filter = 1
-position = Vector2(689, 856)
+position = Vector2(1148, 604)
 texture = ExtResource("4_22b5h")
 
 [node name="Info" type="RichTextLabel" parent="InfoField"]
 texture_filter = 1
-offset_left = -141.0
-offset_top = -323.0
-offset_right = 265.0
-offset_bottom = -244.0
+offset_left = 186.0
+offset_top = -326.0
+offset_right = 662.0
+offset_bottom = 343.0
 theme_override_fonts/normal_font = ExtResource("5_0ohkj")
 text = "Description:
 
@@ -58,7 +57,7 @@ Figures from 3 or 4 blocks fall from above (the figure that will fall next is sh
 
 When a horizontal line is filled, it disappears bringing 100, 300, 1000 or 1500 points, depending on the number of simultaneously filled lines, the combo counter also affects the number of points, which increases if the lines are destroyed by several figures in a row.
 
-Sometimes coins appear on the field that bring 300 extra points if you put a piece on them.
+Sometimes \"plus\" appear on the field that bring 300 extra points, or more depending on the combo, if you put a figure on them.
 
 Every 10 lines destroyed, the level increases, each level increases the falling speed of the figure by 0.5.
 
@@ -69,7 +68,9 @@ NumLock keys or touch screen.
 Developer: Neclor
 Music: Remobius
 
-Special thanks: Ufasoft, Girlname, Ldgenius, Panda"
+Special thanks: Ufasoft, Girlname, Ldgenius, Panda
+
+Thanks to Panda for finding the combo bug. He scored 1256800 points with it."
 
 [node name="NextFigureField" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -153,6 +154,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_oigue")
 
 [node name="Error" type="Label" parent="GameOverField/RecordField/ErrorField/ErrorPanel"]
 texture_filter = 1
+layout_mode = 0
 offset_left = -2.14285
 offset_right = 189.857
 offset_bottom = 49.0
@@ -160,8 +162,10 @@ theme_override_fonts/font = ExtResource("5_0ohkj")
 text = "This name is
 already taken!"
 horizontal_alignment = 1
+autowrap_mode = 2
 
 [node name="EnterAnotherName" type="Button" parent="GameOverField/RecordField/ErrorField/ErrorPanel"]
+layout_mode = 0
 offset_left = -1.71414
 offset_top = 45.4925
 offset_right = 126.286
@@ -173,6 +177,7 @@ name"
 flat = true
 
 [node name="SaveName" type="Button" parent="GameOverField/RecordField/ErrorField/ErrorPanel"]
+layout_mode = 0
 offset_left = 130.0
 offset_top = 51.4994
 offset_right = 188.0

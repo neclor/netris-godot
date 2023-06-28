@@ -26,7 +26,7 @@ var locked_blocks
 var figure
 var figure_ghost
 var figure_next
-var coin
+var plus
 
 var pause
 var game_over
@@ -158,7 +158,7 @@ func init():
 
 	score = 0
 	number_lines = 0
-	combo_counter = 0.5
+	combo_counter = 1
 
 	$PauseField.visible = false
 	$InfoField.visible = false
@@ -176,9 +176,9 @@ func start_game():
 	for block in locked_blocks:
 		block.queue_free()
 
-	if coin != null:
-		coin.remove()
-		coin = null
+	if plus != null:
+		plus.remove()
+		plus = null
 
 	init()
 
@@ -200,25 +200,25 @@ func _on_game_timer_timeout():
 
 		locked_blocks = check_line_fill.locked_blocks
 
-		if coin != null:
-			if coin.check_collected(figure.blocks):
+		if plus != null:
+			if plus.check_collected(figure.blocks):
 				update_score(2)
-				coin.remove()
-				coin = null
+				plus.remove()
+				plus = null
 
 		if check_line_fill.number_filled_lines != 0:
-			if coin != null:
-				coin.remove()
-				coin = null
+			if plus != null:
+				plus.remove()
+				plus = null
 
 			update_level(check_line_fill.number_filled_lines)
 			update_score(check_line_fill.number_filled_lines)
 			update_speed()
 
-			combo_counter += 0.5
+			combo_counter += 1
 
 		else:
-			combo_counter = 0.5
+			combo_counter = 1
 
 		update_combo()
 
@@ -293,12 +293,12 @@ func creating_new_figure():
 	for block in figure_ghost.blocks:
 		$Field.add_child(block)
 
-	if coin == null:
-		coin = Coin.new()
-		if coin.check_available_position(locked_blocks, top_border):
-			$Field.add_child(coin.coin)
+	if plus == null:
+		plus = Plus.new()
+		if plus.check_available_position(locked_blocks, top_border):
+			$Field.add_child(plus.plus)
 		else:
-			coin = null
+			plus = null
 
 func choose_next_figure():
 	if figure_names_bag == []:
@@ -342,7 +342,8 @@ func update_score(number_filled_lines):
 	var new_points = 0
 
 	for i in number_filled_lines:
-		new_points = (new_points * 2 + 100) * combo_counter * 2
+		new_points = (new_points * 2 + 100)
+	new_points *= combo_counter
 	score += new_points
 
 	$Score.text = "Score: " + str(score)
@@ -354,7 +355,7 @@ func update_speed():
 	$Speed.text = "Speed: " + str(speed)
 
 func update_combo():
-	$Combo.text = "x" + str(combo_counter * 2)
+	$Combo.text = "x" + str(combo_counter)
 
 func add_record():
 	if score != 0:

@@ -75,7 +75,7 @@ func change_into_next_figure():
 
 	else:
 		coordinates = Vector2(-Block.block_size / 2, 0)
-	
+
 	update_blocks_coordinates()
 
 #Ghost functions
@@ -216,65 +216,40 @@ func check_move_super_rotation(locked_blocks_coordinates, direction):
 	var next_coordinates = coordinates
 	next_coordinates.x += Block.block_size
 
-	for block_coordinates in blocks_coordinates:
-		next_block_coordinates = Vector2(-block_coordinates.y * direction, block_coordinates.x * direction) + next_coordinates
-		if next_block_coordinates.y > bottom_border or next_block_coordinates.x > right_border or next_block_coordinates.x < left_border or next_block_coordinates in locked_blocks_coordinates:
-			flag = false
-			break
-
-	if flag:
-		coordinates = next_coordinates
-		rotation(direction)
-		return true
-	flag = true
+	if check_rotation(locked_blocks_coordinates, direction, next_coordinates):
+			return true
 
 	next_coordinates = coordinates
 	next_coordinates.x -= Block.block_size
 
-	for block_coordinates_2 in blocks_coordinates:
-		next_block_coordinates = Vector2(-block_coordinates_2.y * direction, block_coordinates_2.x * direction) + next_coordinates
-		if next_block_coordinates.y > bottom_border or next_block_coordinates.x > right_border or next_block_coordinates.x < left_border or next_block_coordinates in locked_blocks_coordinates:
-			flag = false
-			break
-
-	if flag:
-		coordinates = next_coordinates
-		rotation(direction)
-		return true
-	flag = true
+	if check_rotation(locked_blocks_coordinates, direction, next_coordinates):
+			return true
 
 	if figure_name == "i":
 
 		next_coordinates = coordinates
 		next_coordinates.x += Block.block_size * 2
 
-		for block_coordinates_2 in blocks_coordinates:
-			next_block_coordinates = Vector2(-block_coordinates_2.y * direction, block_coordinates_2.x * direction) + next_coordinates
-			if next_block_coordinates.y > bottom_border or next_block_coordinates.x > right_border or next_block_coordinates.x < left_border or next_block_coordinates in locked_blocks_coordinates:
-				flag = false
-				break
-
-		if flag:
-			coordinates = next_coordinates
-			rotation(direction)
+		if check_rotation(locked_blocks_coordinates, direction, next_coordinates):
 			return true
-		flag = true
-		
+
 		next_coordinates = coordinates
 		next_coordinates.x -= Block.block_size * 2
 
-		for block_coordinates_2 in blocks_coordinates:
-			next_block_coordinates = Vector2(-block_coordinates_2.y * direction, block_coordinates_2.x * direction) + next_coordinates
-			if next_block_coordinates.y > bottom_border or next_block_coordinates.x > right_border or next_block_coordinates.x < left_border or next_block_coordinates in locked_blocks_coordinates:
-				flag = false
-				break
-
-		if flag:
-			coordinates = next_coordinates
-			rotation(direction)
+		if check_rotation(locked_blocks_coordinates, direction, next_coordinates):
 			return true
 
 	return false
+
+func check_rotation(locked_blocks_coordinates, direction, next_coordinates):
+	for block_coordinates in blocks_coordinates:
+		var next_block_coordinates = Vector2(-block_coordinates.y * direction, block_coordinates.x * direction) + next_coordinates
+		if next_block_coordinates.y > bottom_border or next_block_coordinates.x > right_border or next_block_coordinates.x < left_border or next_block_coordinates in locked_blocks_coordinates:
+			return false
+
+	coordinates = next_coordinates
+	rotation(direction)
+	return true
 
 func rotation(direction):
 	var next_block_coordinates
