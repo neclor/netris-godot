@@ -458,7 +458,7 @@ func _input(event):
 				fall_check = true
 
 			if event is InputEventScreenDrag:
-				if event.velocity.y >= 3000:
+				if event.velocity.y >= 2000:
 					if fall_check:
 						figure.move_fall(locked_blocks)
 						_on_game_timer_timeout()
@@ -479,4 +479,4 @@ func _input(event):
 					figure_ghost.ghost_move_down(figure.coordinates, figure.blocks_coordinates, locked_blocks)
 
 				just_touch = false
-			used_button = false
+		used_button = false
