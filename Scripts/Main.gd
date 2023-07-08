@@ -364,7 +364,7 @@ func add_record():
 
 		else:
 			$GameOverField/RecordField/HTTPRequest.request_completed.connect(self.http_request_completed)
-			$GameOverField/RecordField/HTTPRequest.request("https://neclor.ru/Records?name=%s&score=%d" % [player_name, score], \
+			$GameOverField/RecordField/HTTPRequest.request("https://neclor.ru/Records?name=%s&score=%d" % [player_name.uri_encode(), score], \
 				[], HTTPClient.METHOD_POST, '{}')
 
 func parse_http_headers(headers: Array) -> Dictionary:
