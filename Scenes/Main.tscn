@@ -1,0 +1,144 @@
+[gd_scene load_steps=4 format=3 uid="uid://bcl1rvse24m45"]
+
+[ext_resource type="Script" path="res://Scripts/Main.gd" id="1_08pep"]
+[ext_resource type="Texture2D" uid="uid://bdjjo1qliesif" path="res://Assets/GameField.png" id="2_rissd"]
+[ext_resource type="Texture2D" uid="uid://c6wvx2e3ygayv" path="res://Assets/PauseButton.png" id="3_4ujkf"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_08pep")
+
+[node name="GameTimer" type="Timer" parent="."]
+
+[node name="PressedTimer" type="Timer" parent="."]
+wait_time = 0.01
+
+[node name="GameField" type="Sprite2D" parent="."]
+position = Vector2(384, 624)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_rissd")
+
+[node name="StartTextureButton" type="TextureButton" parent="."]
+offset_left = 17.0
+offset_top = 14.0
+offset_right = 128.0
+offset_bottom = 129.0
+texture_normal = ExtResource("3_4ujkf")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="DownButton" type="Button" parent="."]
+offset_left = -1.0
+offset_top = 1101.0
+offset_right = 768.0
+offset_bottom = 1246.0
+focus_mode = 0
+flat = true
+
+[node name="LeftButton" type="Button" parent="."]
+offset_left = -31.0
+offset_top = 254.0
+offset_right = 202.0
+offset_bottom = 1210.0
+focus_mode = 0
+flat = true
+
+[node name="RightButton" type="Button" parent="."]
+offset_left = 532.0
+offset_top = 148.0
+offset_right = 770.0
+offset_bottom = 1101.0
+focus_mode = 0
+flat = true
+
+[node name="TurnButton" type="Button" parent="."]
+offset_left = 238.0
+offset_top = 143.0
+offset_right = 530.0
+offset_bottom = 1104.0
+focus_mode = 0
+flat = true
+
+[node name="ScoreLabel" type="Label" parent="."]
+offset_left = 480.0
+offset_top = 72.0
+offset_right = 573.0
+offset_bottom = 120.0
+text = "Score: 0"
+vertical_alignment = 1
+
+[node name="SpeedLabel" type="Label" parent="."]
+offset_left = 192.0
+offset_top = 72.0
+offset_right = 288.0
+offset_bottom = 120.0
+text = "Speed: 1"
+vertical_alignment = 1
+
+[node name="NextTetrominoPanel" type="Panel" parent="."]
+offset_left = 311.0
+offset_top = 14.0
+offset_right = 449.0
+offset_bottom = 136.0
+
+[node name="NextTetrominoPicture" type="TextureRect" parent="NextTetrominoPanel"]
+layout_mode = 0
+offset_left = -5.0
+offset_top = 99.0
+offset_right = 91.0
+offset_bottom = 195.0
+expand_mode = 1
+
+[node name="GameOverPanel" type="Panel" parent="."]
+offset_left = 241.0
+offset_top = 338.0
+offset_right = 529.0
+offset_bottom = 529.0
+
+[node name="GameOverLabel" type="Label" parent="GameOverPanel"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = -3.0
+offset_right = 295.0
+offset_bottom = 189.0
+text = "GAME
+OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InputPanel" type="Panel" parent="GameOverPanel"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 286.0
+offset_right = 292.0
+offset_bottom = 477.0
+
+[node name="InputLineEdit" type="LineEdit" parent="GameOverPanel/InputPanel"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 60.0
+offset_right = 257.0
+offset_bottom = 102.0
+placeholder_text = "Input name"
+
+[node name="InputButton" type="Button" parent="GameOverPanel/InputPanel"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 123.0
+offset_right = 195.0
+offset_bottom = 173.0
+text = "OK"
+
+[node name="HTTPRequest" type="HTTPRequest" parent="GameOverPanel/InputPanel"]
+
+[connection signal="ready" from="." to="." method="_on_ready"]
+[connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]
+[connection signal="timeout" from="PressedTimer" to="." method="_on_pressed_timer_timeout"]
+[connection signal="pressed" from="StartTextureButton" to="." method="_on_start_texture_button_pressed"]
+[connection signal="button_down" from="DownButton" to="." method="_on_down_button_button_down"]
+[connection signal="button_up" from="DownButton" to="." method="_on_down_button_button_up"]
+[connection signal="button_down" from="LeftButton" to="." method="_on_left_button_button_down"]
+[connection signal="button_up" from="LeftButton" to="." method="_on_left_button_button_up"]
+[connection signal="button_down" from="RightButton" to="." method="_on_right_button_button_down"]
+[connection signal="button_up" from="RightButton" to="." method="_on_right_button_button_up"]
+[connection signal="pressed" from="TurnButton" to="." method="_on_turn_button_pressed"]
+[connection signal="pressed" from="GameOverPanel/InputPanel/InputButton" to="." method="_on_input_button_pressed"]

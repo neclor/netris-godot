@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" uid="uid://bcp2nclvuen54" path="res://Assets/BlockL.png" id="1_gumb4"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Block" type="Sprite2D" parent="."]
+texture = ExtResource("1_gumb4")
+centered = false
+
+[connection signal="draw" from="Block" to="Block" method="_on_draw"]
