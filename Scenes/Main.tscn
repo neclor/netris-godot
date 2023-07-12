@@ -1,26 +1,26 @@
 [gd_scene load_steps=12 format=3 uid="uid://mhodfmyfghx0"]
 
-[ext_resource type="Script" path="res://Scripts/Main.gd" id="1_3ty82"]
-[ext_resource type="AudioStream" uid="uid://df6ssujw5pat8" path="res://Assets/Music/Netris_ost.mp3" id="2_217kw"]
-[ext_resource type="Texture2D" uid="uid://cotqpgml1c4ds" path="res://Assets/Sprites/Field.png" id="2_m3uwa"]
-[ext_resource type="Texture2D" uid="uid://c10jiiyvtwisp" path="res://Assets/Sprites/PauseField.png" id="4_22b5h"]
-[ext_resource type="Texture2D" uid="uid://dgmmhnswkgdee" path="res://Assets/Sprites/NextFigureField.png" id="4_dd157"]
-[ext_resource type="FontFile" uid="uid://dm3n8xskwvsho" path="res://Assets/Fonts/Xolonium-Bold.ttf" id="5_0ohkj"]
-[ext_resource type="Texture2D" uid="uid://dmu8si5s4yfe4" path="res://Assets/Sprites/Start.png" id="5_focew"]
-[ext_resource type="Texture2D" uid="uid://dc4o3wn6ruj4p" path="res://Assets/Sprites/SoundOff.png" id="6_bg2gg"]
-[ext_resource type="Texture2D" uid="uid://c1lcwblcp621q" path="res://Assets/Sprites/RecordField.png" id="6_hcqqn"]
-[ext_resource type="Texture2D" uid="uid://c3ehdq44ntk07" path="res://Assets/Sprites/info.png" id="7_eu3jb"]
+[ext_resource type="Script" path="res://Scripts/Main.gd" id="1_2pg0b"]
+[ext_resource type="AudioStream" uid="uid://df6ssujw5pat8" path="res://Assets/Music/Netris_ost.mp3" id="2_i3wbw"]
+[ext_resource type="Texture2D" uid="uid://cotqpgml1c4ds" path="res://Assets/Sprites/Field.png" id="3_fa00r"]
+[ext_resource type="Texture2D" uid="uid://c10jiiyvtwisp" path="res://Assets/Sprites/PauseField.png" id="4_p6unr"]
+[ext_resource type="FontFile" uid="uid://dm3n8xskwvsho" path="res://Assets/Fonts/Xolonium-Bold.ttf" id="5_02fhe"]
+[ext_resource type="Texture2D" uid="uid://dgmmhnswkgdee" path="res://Assets/Sprites/NextFigureField.png" id="6_33vnc"]
+[ext_resource type="Texture2D" uid="uid://c1lcwblcp621q" path="res://Assets/Sprites/RecordField.png" id="7_dnd73"]
+[ext_resource type="Texture2D" uid="uid://dmu8si5s4yfe4" path="res://Assets/Sprites/Start.png" id="8_8q6o3"]
+[ext_resource type="Texture2D" uid="uid://dc4o3wn6ruj4p" path="res://Assets/Sprites/SoundOff.png" id="9_g6cvv"]
+[ext_resource type="Texture2D" uid="uid://c3ehdq44ntk07" path="res://Assets/Sprites/info.png" id="10_450ih"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oigue"]
 
 [node name="Main" type="Node2D"]
-script = ExtResource("1_3ty82")
+script = ExtResource("1_2pg0b")
 
 [node name="GameTimer" type="Timer" parent="."]
 wait_time = 0.5
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_217kw")
+stream = ExtResource("2_i3wbw")
 volume_db = -10.0
 autoplay = true
 
@@ -29,28 +29,28 @@ clip_children = 2
 texture_filter = 1
 position = Vector2(394, 694)
 scale = Vector2(1.4, 1.4)
-texture = ExtResource("2_m3uwa")
+texture = ExtResource("3_fa00r")
 
 [node name="PauseField" type="Sprite2D" parent="."]
 visible = false
 z_index = 4
 texture_filter = 1
 position = Vector2(447, 734)
-texture = ExtResource("4_22b5h")
+texture = ExtResource("4_p6unr")
 
 [node name="InfoField" type="Sprite2D" parent="."]
 z_index = 5
 texture_filter = 1
 position = Vector2(1148, 604)
-texture = ExtResource("4_22b5h")
+texture = ExtResource("4_p6unr")
 
 [node name="Info" type="RichTextLabel" parent="InfoField"]
 texture_filter = 1
-offset_left = 186.0
-offset_top = -326.0
-offset_right = 662.0
-offset_bottom = 343.0
-theme_override_fonts/normal_font = ExtResource("5_0ohkj")
+offset_left = -149.0
+offset_top = -334.0
+offset_right = 327.0
+offset_bottom = 335.0
+theme_override_fonts/normal_font = ExtResource("5_02fhe")
 text = "Description:
 
 Figures from 3 or 4 blocks fall from above (the figure that will fall next is shown above the playing field).
@@ -76,14 +76,14 @@ Thanks to Panda for finding the combo bug. He scored 1256800 points with it."
 texture_filter = 1
 position = Vector2(391, 101)
 scale = Vector2(1.4, 1.4)
-texture = ExtResource("4_dd157")
+texture = ExtResource("6_33vnc")
 
 [node name="GameOverField" type="Sprite2D" parent="."]
 z_index = 4
 texture_filter = 1
 position = Vector2(394, 429)
 scale = Vector2(1.4, 1.4)
-texture = ExtResource("4_dd157")
+texture = ExtResource("6_33vnc")
 
 [node name="GameOver" type="Label" parent="GameOverField"]
 texture_filter = 1
@@ -96,7 +96,7 @@ offset_left = 133.458
 offset_top = 207.401
 offset_right = 261.458
 offset_bottom = 270.401
-theme_override_fonts/font = ExtResource("5_0ohkj")
+theme_override_fonts/font = ExtResource("5_02fhe")
 text = "GAME OVER"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -104,7 +104,7 @@ vertical_alignment = 1
 [node name="RecordField" type="Sprite2D" parent="GameOverField"]
 texture_filter = 1
 position = Vector2(-1.52588e-05, 173.571)
-texture = ExtResource("6_hcqqn")
+texture = ExtResource("7_dnd73")
 
 [node name="AddRecord" type="Label" parent="GameOverField/RecordField"]
 texture_filter = 1
@@ -112,7 +112,7 @@ offset_left = -76.4286
 offset_top = -42.1424
 offset_right = 76.5714
 offset_bottom = -19.1424
-theme_override_fonts/font = ExtResource("5_0ohkj")
+theme_override_fonts/font = ExtResource("5_02fhe")
 text = "Add record"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -123,7 +123,7 @@ offset_left = -83.5714
 offset_top = -15.7138
 offset_right = 77.4286
 offset_bottom = 12.2862
-theme_override_fonts/font = ExtResource("5_0ohkj")
+theme_override_fonts/font = ExtResource("5_02fhe")
 placeholder_text = "Enter name"
 
 [node name="AcceptName" type="Button" parent="GameOverField/RecordField"]
@@ -133,7 +133,7 @@ offset_top = 15.7147
 offset_right = 25.5714
 offset_bottom = 43.7147
 focus_mode = 0
-theme_override_fonts/font = ExtResource("5_0ohkj")
+theme_override_fonts/font = ExtResource("5_02fhe")
 text = "ok"
 flat = true
 
@@ -142,7 +142,7 @@ z_index = 1
 texture_filter = 1
 position = Vector2(312.143, 29.2862)
 scale = Vector2(1, 0.998626)
-texture = ExtResource("6_hcqqn")
+texture = ExtResource("7_dnd73")
 
 [node name="ErrorPanel" type="Panel" parent="GameOverField/RecordField/ErrorField"]
 texture_filter = 1
@@ -158,7 +158,7 @@ layout_mode = 0
 offset_left = -2.14285
 offset_right = 189.857
 offset_bottom = 49.0
-theme_override_fonts/font = ExtResource("5_0ohkj")
+theme_override_fonts/font = ExtResource("5_02fhe")
 text = "This name is
 already taken!"
 horizontal_alignment = 1
@@ -171,7 +171,7 @@ offset_top = 45.4925
 offset_right = 126.286
 offset_bottom = 93.4925
 focus_mode = 0
-theme_override_fonts/font = ExtResource("5_0ohkj")
+theme_override_fonts/font = ExtResource("5_02fhe")
 text = "enter another 
 name"
 flat = true
@@ -183,7 +183,7 @@ offset_top = 51.4994
 offset_right = 188.0
 offset_bottom = 95.4994
 focus_mode = 0
-theme_override_fonts/font = ExtResource("5_0ohkj")
+theme_override_fonts/font = ExtResource("5_02fhe")
 text = "ok"
 flat = true
 
@@ -195,7 +195,7 @@ offset_left = 32.0
 offset_top = 33.0
 offset_right = 100.0
 offset_bottom = 57.0
-theme_override_fonts/font = ExtResource("5_0ohkj")
+theme_override_fonts/font = ExtResource("5_02fhe")
 text = "Neclor"
 underline = 1
 uri = "/index.html"
@@ -206,7 +206,7 @@ offset_left = 35.0
 offset_top = 200.0
 offset_right = 122.0
 offset_bottom = 285.0
-texture_normal = ExtResource("5_focew")
+texture_normal = ExtResource("8_8q6o3")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -216,7 +216,7 @@ offset_left = 32.0
 offset_top = 339.0
 offset_right = 118.0
 offset_bottom = 422.0
-texture_normal = ExtResource("6_bg2gg")
+texture_normal = ExtResource("9_g6cvv")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -226,7 +226,7 @@ offset_left = 31.0
 offset_top = 471.0
 offset_right = 116.0
 offset_bottom = 553.0
-texture_normal = ExtResource("7_eu3jb")
+texture_normal = ExtResource("10_450ih")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -236,7 +236,7 @@ offset_left = 528.0
 offset_top = 112.0
 offset_right = 708.0
 offset_bottom = 149.0
-theme_override_fonts/font = ExtResource("5_0ohkj")
+theme_override_fonts/font = ExtResource("5_02fhe")
 text = "Score: 0"
 vertical_alignment = 1
 
@@ -246,7 +246,7 @@ offset_left = 525.0
 offset_top = 63.0
 offset_right = 779.0
 offset_bottom = 89.0
-theme_override_fonts/font = ExtResource("5_0ohkj")
+theme_override_fonts/font = ExtResource("5_02fhe")
 text = "x1"
 vertical_alignment = 1
 
@@ -256,7 +256,7 @@ offset_left = 640.0
 offset_top = 209.0
 offset_right = 852.0
 offset_bottom = 235.0
-theme_override_fonts/font = ExtResource("5_0ohkj")
+theme_override_fonts/font = ExtResource("5_02fhe")
 text = "Speed: 2"
 vertical_alignment = 1
 
@@ -266,7 +266,7 @@ offset_left = 639.0
 offset_top = 264.0
 offset_right = 885.0
 offset_bottom = 290.0
-theme_override_fonts/font = ExtResource("5_0ohkj")
+theme_override_fonts/font = ExtResource("5_02fhe")
 text = "Level: 0"
 vertical_alignment = 1
 
@@ -276,7 +276,7 @@ offset_left = 637.0
 offset_top = 309.0
 offset_right = 870.0
 offset_bottom = 335.0
-theme_override_fonts/font = ExtResource("5_0ohkj")
+theme_override_fonts/font = ExtResource("5_02fhe")
 text = "Lines: 0"
 vertical_alignment = 1
 

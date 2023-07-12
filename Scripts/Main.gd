@@ -180,6 +180,8 @@ func start_game():
 		plus.remove()
 		plus = null
 
+	interface_scaling()
+
 	init()
 
 	choose_next_figure()
