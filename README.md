@@ -10,5 +10,5 @@ Tetris-like game that I made with Godot and GDScript.
 For control you can use: keyboard, mouse or touchscreen.
 
 ### Install
-- Download Godot4
+- Download Godot 4.0
 - Specify the path to the game folder
