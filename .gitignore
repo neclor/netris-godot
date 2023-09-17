@@ -1,2 +1,10 @@
 # Godot 4+ specific ignores
 .godot/
+
+# Godot-specific ignores
+.import/
+export.cfg
+export_pesets.cfg
+
+# Imported translations
+*.translation

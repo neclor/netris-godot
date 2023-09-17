@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Netris"
 run/main_scene="res://Scenes/Main.tscn"
-config/features=PackedStringArray("4.0", "Mobile")
+config/features=PackedStringArray("4.1", "Mobile")
 boot_splash/bg_color=Color(0.0627451, 0.0627451, 0.0627451, 1)
 boot_splash/image="res://Assets/Sprites/Netris.png"
 boot_splash/use_filter=false
