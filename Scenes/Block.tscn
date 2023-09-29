@@ -1,10 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://d2yaqavqaey88"]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource type="Texture2D" uid="uid://da5mxp6vajois" path="res://Assets/Sprites/Block.png" id="1_i0bhe"]
+[ext_resource path="res://Scripts/Block.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Sprites/Block.png" type="Texture" id=2]
 
 [node name="Block" type="Node2D"]
+script = ExtResource( 1 )
 
-[node name="Block" type="Sprite2D" parent="."]
-texture_filter = 1
-texture = ExtResource("1_i0bhe")
+[node name="Block" type="Sprite" parent="."]
+texture = ExtResource( 2 )
 centered = false

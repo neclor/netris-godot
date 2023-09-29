@@ -6,15 +6,15 @@ var bottom_border
 var left_border
 var right_border
 
-const figures_description = {
+var figures_description = {
 	"i": [Color("#00ffff"), Vector2(-Block.block_size, 0), Vector2(0, 0), Vector2(Block.block_size, 0), Vector2(Block.block_size * 2, 0)],
 	"o": [Color("#ffff00"), Vector2(0, -Block.block_size), Vector2(Block.block_size, -Block.block_size), Vector2(0, 0), Vector2(Block.block_size, 0)],
-	"t": [Color("#ff00ff"), Vector2(0, -Block.block_size), Vector2(-Block.block_size, 0), Vector2(0, 0), Vector2(Block.block_size, 0)],
+	"t": [Color("#8000ff"), Vector2(0, -Block.block_size), Vector2(-Block.block_size, 0), Vector2(0, 0), Vector2(Block.block_size, 0)],
 	"j": [Color("#ff8000"), Vector2(-Block.block_size, -Block.block_size), Vector2(-Block.block_size, 0), Vector2(0, 0), Vector2(Block.block_size, 0)],
 	"l": [Color("#0000ff"), Vector2(Block.block_size, -Block.block_size), Vector2(-Block.block_size, 0), Vector2(0, 0), Vector2(Block.block_size, 0)],
 	"s": [Color("#00ff00"), Vector2(0, -Block.block_size), Vector2(Block.block_size, -Block.block_size), Vector2(-Block.block_size, 0), Vector2(0, 0)],
 	"z": [Color("#ff0000"), Vector2(-Block.block_size, -Block.block_size), Vector2(0, -Block.block_size), Vector2(0, 0), Vector2(Block.block_size, 0)],
-	"g": [Color("#8000ff"), Vector2(0, -Block.block_size), Vector2(0, 0), Vector2(Block.block_size, 0)],
+	"g": [Color("#ff00ff"), Vector2(0, -Block.block_size), Vector2(0, 0), Vector2(Block.block_size, 0)],
 	"y": [Color("#00ff80"), Vector2(-Block.block_size, 0), Vector2(0, 0), Vector2(Block.block_size, 0)]
 }
 
@@ -38,11 +38,11 @@ func _init(set_figure_name, initial_coordinates, set_top_border, set_bottom_bord
 
 	figure_name = set_figure_name
 	var figure_description = figures_description[figure_name];
-	blocks_coordinates = figure_description.slice(1)
+	blocks_coordinates = figure_description.slice(1, figure_description.size())
 	var color = figure_description[0]
 
 	for i in len(figure_description) - 1:
-		var block = Block.Block_scene.instantiate()
+		var block = Block.Block_scene.instance()
 		var block_sprite = block.get_node("Block")
 
 		block.z_index = 2
@@ -89,7 +89,7 @@ func change_into_ghost():
 
 		block.z_index = 0
 
-		Block.change_color(block_sprite, Color("#000000"), color)
+		Block.change_color(block_sprite, Color("#202020"), color)
 
 func ghost_move_down(set_coordinates, set_blocks_coordinates, locked_blocks):
 	if blocks == []:

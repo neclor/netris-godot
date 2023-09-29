@@ -9,12 +9,12 @@ const sound_off_texture = preload("res://Assets/Sprites/SoundOff.png")
 const field_height = 22
 const field_width = 10
 
-const top_border = -(field_height / 2 - 2) * Block.block_size
-const bottom_border = (field_height / 2 - 1) * Block.block_size
-const left_border = -(field_width / 2) * Block.block_size
-const right_border =(field_width / 2 - 1) * Block.block_size
+var top_border = -(field_height / 2 - 2) * Block.block_size
+var bottom_border = (field_height / 2 - 1) * Block.block_size
+var left_border = -(field_width / 2) * Block.block_size
+var right_border =(field_width / 2 - 1) * Block.block_size
 
-const initial_coordinates = Vector2(-Block.block_size, -(field_height / 2 - 1) * Block.block_size)
+var initial_coordinates = Vector2(-Block.block_size, -(field_height / 2 - 0) * Block.block_size)
 
 const figure_names = ["i", "o", "t", "j", "l", "s", "z", "g", "y"]
 
@@ -26,7 +26,6 @@ var locked_blocks
 var figure
 var figure_ghost
 var figure_next
-var plus
 
 var pause
 var game_over
@@ -35,14 +34,14 @@ var score
 var combo_counter
 var number_lines
 
-var player_name
+var rng = RandomNumberGenerator.new()
 
 #Basic functions
 
 func interface_scaling():
-	const block_size = Block.block_size
-	const intrface_height = 28
-	const intrface_width = 18
+	var block_size = Block.block_size
+	var intrface_height = 28
+	var intrface_width = 18
 
 	var window_size = get_viewport().size
 	var interface_scale = float(min(window_size.x / intrface_width, window_size.y / intrface_height)) / block_size
@@ -56,14 +55,6 @@ func interface_scaling():
 	$PauseField.position = Vector2(center.x, center.y + block_size * interface_scale)
 	$PauseField.scale /= $PauseField.scale
 	$PauseField.scale *= interface_scale
-	
-	$InfoField.position = Vector2(center.x, center.y + block_size * interface_scale)
-	$InfoField.scale /= $InfoField.scale
-	$InfoField.scale *= interface_scale
-
-	$InfoField/Info.position = Vector2(-(field_width / 2 - 0.5) * block_size, -(field_height / 2 - 0.5) * block_size)
-	$InfoField/Info.size = Vector2((field_width - 1) * block_size, (field_height - 1) * block_size)
-	$InfoField/Info.add_theme_font_size_override("font_size", block_size / 2)
 
 	$NextFigureField.position = Vector2(center.x, center.y - (field_height / 2 + 1) * block_size * interface_scale)
 	$NextFigureField.scale /= $NextFigureField.scale
@@ -73,78 +64,39 @@ func interface_scaling():
 	$GameOverField.scale /= $GameOverField.scale
 	$GameOverField.scale *= interface_scale
 
-	$GameOverField/GameOver.position = Vector2(-2 * block_size, -block_size)
-	$GameOverField/GameOver.size = Vector2(4 * block_size, 2 * block_size)
-	$GameOverField/GameOver.add_theme_font_size_override("font_size", block_size / 2)
+	$GameOverField/GameOver.set_position(Vector2(-2 * block_size, -block_size))
+	$GameOverField/GameOver.set_size(Vector2(4 * block_size, 2 * block_size))
+	#$GameOverField/GameOver.add_theme_font_size_override("font_size", block_size / 2)
 
-	$GameOverField/RecordField.position = Vector2(0, 5.5 * block_size)
-	$GameOverField/RecordField.scale /= $GameOverField/RecordField.scale
+	$Combo.set_position(Vector2(center.x + (field_width / 2 - 2) * block_size * interface_scale, center.y - (field_height / 2 + 2) * block_size * interface_scale))
+	$Combo.set_size(Vector2(block_size * interface_scale, block_size * interface_scale))
+	#$Combo.add_theme_font_size_override("font_size", block_size * interface_scale / 2)
 
-	$GameOverField/RecordField/AddRecord.position = Vector2(-2.5 * block_size, -1.5 * block_size)
-	$GameOverField/RecordField/AddRecord.size = Vector2(5 * block_size, block_size)
-	$GameOverField/RecordField/AddRecord.add_theme_font_size_override("font_size", block_size / 2)
+	$Score.set_position(Vector2(center.x + (field_width / 2 - 2) * block_size * interface_scale, center.y - (field_height / 2 + 1) * block_size * interface_scale))
+	$Score.set_size(Vector2(block_size * interface_scale, block_size * interface_scale))
+	#$Score.add_theme_font_size_override("font_size", block_size * interface_scale / 2)
 
-	$GameOverField/RecordField/InputName.position = Vector2(-2.5 * block_size, -0.5 * block_size)
-	$GameOverField/RecordField/InputName.size = Vector2(5 * block_size, block_size)
-	$GameOverField/RecordField/InputName.add_theme_font_size_override("font_size", block_size / 2)
+	$Speed.set_position(Vector2(center.x + (field_width / 2 + 0.5) * block_size * interface_scale, center.y - (field_height / 2 - 1) * block_size * interface_scale))
+	$Speed.set_size(Vector2(block_size * interface_scale, block_size * interface_scale))
+	#$Speed.add_theme_font_size_override("font_size", block_size * interface_scale / 2)
 
-	$GameOverField/RecordField/AcceptName.position = Vector2(-block_size, 0.5 * block_size)
-	$GameOverField/RecordField/AcceptName.size = Vector2(2 * block_size, block_size)
-	$GameOverField/RecordField/AcceptName.add_theme_font_size_override("font_size", block_size / 2)
+	$Level.set_position(Vector2(center.x + (field_width / 2 + 0.5) * block_size * interface_scale, center.y - (field_height / 2 - 2) * block_size * interface_scale))
+	$Level.set_size(Vector2(block_size * interface_scale, block_size * interface_scale))
+	#$Level.add_theme_font_size_override("font_size", block_size * interface_scale / 2)
 
-	$GameOverField/RecordField/ErrorField.position = Vector2(0, 0)
-	$GameOverField/RecordField/ErrorField.scale /= $GameOverField/RecordField/ErrorField.scale
-	
-	$GameOverField/RecordField/ErrorField/ErrorPanel.position = Vector2(-3 * block_size, -1.5 * block_size)
-	$GameOverField/RecordField/ErrorField/ErrorPanel.size = Vector2(6 * block_size, 3 * block_size)
+	$NumberLines.set_position(Vector2(center.x + (field_width / 2 + 0.5) * block_size * interface_scale, center.y - (field_height / 2 - 3) * block_size * interface_scale))
+	$NumberLines.set_size(Vector2(block_size * interface_scale, block_size * interface_scale))
+	#$NumberLines.add_theme_font_size_override("font_size", block_size * interface_scale / 2)
 
-	$GameOverField/RecordField/ErrorField/ErrorPanel/Error.position = Vector2(0, 0)
-	$GameOverField/RecordField/ErrorField/ErrorPanel/Error.size = Vector2(6 * block_size, 1.5 * block_size)
-	$GameOverField/RecordField/ErrorField/ErrorPanel/Error.add_theme_font_size_override("font_size", block_size / 2)
+	$PauseButton.set_position(Vector2(center.x - (field_width / 2 + 3) * block_size * interface_scale, center.y - (field_height / 2 - 1) * block_size * interface_scale))
+	$PauseButton.set_size(Vector2(2 * block_size * interface_scale, 2 * block_size * interface_scale))
 
-	$GameOverField/RecordField/ErrorField/ErrorPanel/EnterAnotherName.position = Vector2(0, 1.5 * block_size)
-	$GameOverField/RecordField/ErrorField/ErrorPanel/EnterAnotherName.size = Vector2(4 * block_size, 1.5 * block_size)
-	$GameOverField/RecordField/ErrorField/ErrorPanel/EnterAnotherName.add_theme_font_size_override("font_size", block_size / 2)
+	$SoundButton.set_position(Vector2(center.x - (field_width / 2 + 3) * block_size * interface_scale, center.y - (field_height / 2 - 4) * block_size * interface_scale))
+	$SoundButton.set_size(Vector2(2 * block_size * interface_scale, 2 * block_size * interface_scale))
 
-	$GameOverField/RecordField/ErrorField/ErrorPanel/SaveName.position = Vector2(4 * block_size, 1.5 * block_size)
-	$GameOverField/RecordField/ErrorField/ErrorPanel/SaveName.size = Vector2(2 * block_size, 1.5 * block_size)
-	$GameOverField/RecordField/ErrorField/ErrorPanel/SaveName.add_theme_font_size_override("font_size", block_size / 2)
-
-	$Combo.position = Vector2(center.x + (field_width / 2 - 2) * block_size * interface_scale, center.y - (field_height / 2 + 2) * block_size * interface_scale)
-	$Combo.size = Vector2(block_size * interface_scale, block_size * interface_scale)
-	$Combo.add_theme_font_size_override("font_size", block_size * interface_scale / 2)
-
-	$Score.position = Vector2(center.x + (field_width / 2 - 2) * block_size * interface_scale, center.y - (field_height / 2 + 1) * block_size * interface_scale)
-	$Score.size = Vector2(block_size * interface_scale, block_size * interface_scale)
-	$Score.add_theme_font_size_override("font_size", block_size * interface_scale / 2)
-
-	$Speed.position = Vector2(center.x + (field_width / 2 + 0.5) * block_size * interface_scale, center.y - (field_height / 2 - 1) * block_size * interface_scale)
-	$Speed.size = Vector2(block_size * interface_scale, block_size * interface_scale)
-	$Speed.add_theme_font_size_override("font_size", block_size * interface_scale / 2)
-
-	$Level.position = Vector2(center.x + (field_width / 2 + 0.5) * block_size * interface_scale, center.y - (field_height / 2 - 2) * block_size * interface_scale)
-	$Level.size = Vector2(block_size * interface_scale, block_size * interface_scale)
-	$Level.add_theme_font_size_override("font_size", block_size * interface_scale / 2)
-
-	$NumberLines.position = Vector2(center.x + (field_width / 2 + 0.5) * block_size * interface_scale, center.y - (field_height / 2 - 3) * block_size * interface_scale)
-	$NumberLines.size = Vector2(block_size * interface_scale, block_size * interface_scale)
-	$NumberLines.add_theme_font_size_override("font_size", block_size * interface_scale / 2)
-
-	$Neclor.position = Vector2(center.x - (field_width / 2 + 3) * block_size * interface_scale, center.y - (field_height / 2 + 2) * block_size * interface_scale)
-	$Neclor.size = Vector2(2 * block_size * interface_scale, block_size * interface_scale)
-	$Neclor.add_theme_font_size_override("font_size", block_size * interface_scale / 2)
-
-	$PauseButton.position = Vector2(center.x - (field_width / 2 + 3) * block_size * interface_scale, center.y - (field_height / 2 - 1) * block_size * interface_scale)
-	$PauseButton.size = Vector2(2 * block_size * interface_scale, 2 * block_size * interface_scale)
-
-	$SoundButton.position = Vector2(center.x - (field_width / 2 + 3) * block_size * interface_scale, center.y - (field_height / 2 - 4) * block_size * interface_scale)
-	$SoundButton.size = Vector2(2 * block_size * interface_scale, 2 * block_size * interface_scale)
-
-	$InfoButton.position = Vector2(center.x - (field_width / 2 + 3) * block_size * interface_scale, center.y - (field_height / 2 - 7) * block_size * interface_scale)
-	$InfoButton.size = Vector2(2 * block_size * interface_scale, 2 * block_size * interface_scale)
 
 func _ready():
-	player_name = ""
+	rng.randomize()
 
 	init()
 	interface_scaling()
@@ -161,11 +113,7 @@ func init():
 	combo_counter = 1
 
 	$PauseField.visible = false
-	$InfoField.visible = false
 	$GameOverField.visible = false
-	$GameOverField/RecordField.visible = false
-	$GameOverField/RecordField/ErrorField.visible = false
-	$GameOverField/RecordField/ErrorField/ErrorPanel/EnterAnotherName.visible = true
 
 	update_level(0)
 	update_score(0)
@@ -175,10 +123,6 @@ func init():
 func start_game():
 	for block in locked_blocks:
 		block.queue_free()
-
-	if plus != null:
-		plus.remove()
-		plus = null
 
 	interface_scaling()
 
@@ -202,17 +146,7 @@ func _on_game_timer_timeout():
 
 		locked_blocks = check_line_fill.locked_blocks
 
-		if plus != null:
-			if plus.check_collected(figure.blocks):
-				update_score(2)
-				plus.remove()
-				plus = null
-
 		if check_line_fill.number_filled_lines != 0:
-			if plus != null:
-				plus.remove()
-				plus = null
-
 			update_level(check_line_fill.number_filled_lines)
 			update_score(check_line_fill.number_filled_lines)
 			update_speed()
@@ -231,8 +165,6 @@ func _on_game_timer_timeout():
 			creating_new_figure()
 
 func pause_game():
-	$InfoField.visible = false
-
 	if game_over:
 		start_game()
 
@@ -261,20 +193,6 @@ func pause_music():
 
 		$SoundButton.texture_normal = sound_off_texture
 
-func info():
-	if $InfoField.visible:
-		$InfoField.visible = false
-
-	else:
-		$InfoField.visible = true
-
-		if !game_over:
-			pause = true
-			$GameTimer.stop()
-
-			$PauseField.visible = true
-			$PauseButton.texture_normal = start_texture
-
 #------ functions
 
 func creating_new_figure():
@@ -283,6 +201,8 @@ func creating_new_figure():
 	figure = Figure.new(choosed_figure, initial_coordinates, top_border, bottom_border, left_border, right_border)
 	for block in figure.blocks:
 		$Field.add_child(block)
+
+	print(figure.blocks)
 
 	figure_next = Figure.new(next_figure_name, initial_coordinates, top_border, bottom_border, left_border, right_border)
 	figure_next.change_into_next_figure()
@@ -295,22 +215,15 @@ func creating_new_figure():
 	for block in figure_ghost.blocks:
 		$Field.add_child(block)
 
-	if plus == null:
-		plus = Plus.new()
-		if plus.check_available_position(locked_blocks, top_border):
-			$Field.add_child(plus.plus)
-		else:
-			plus = null
-
 func choose_next_figure():
 	if figure_names_bag == []:
 		figure_names_bag = figure_names.duplicate()
 
-	var new_figure_name_index = randi_range(0, len(figure_names_bag) - 1)
+	var new_figure_name_index = rng.randf_range(0, len(figure_names_bag) - 1)
 	var current_figure_name = next_figure_name
 
 	next_figure_name = figure_names_bag[new_figure_name_index]
-	figure_names_bag.remove_at(new_figure_name_index)
+	figure_names_bag.remove(new_figure_name_index)
 
 	return current_figure_name
 
@@ -324,8 +237,6 @@ func check_game_over():
 			$GameOverField.visible = true
 			$PauseButton.texture_normal = start_texture
 			$Music.volume_db = -10
-
-			add_record()
 
 			return true
 	return false
@@ -359,38 +270,6 @@ func update_speed():
 func update_combo():
 	$Combo.text = "x" + str(combo_counter)
 
-func add_record():
-	if score != 0:
-		if player_name == "":
-			$GameOverField/RecordField.visible = true
-
-		else:
-			$GameOverField/RecordField/HTTPRequest.request_completed.connect(self.http_request_completed)
-			$GameOverField/RecordField/HTTPRequest.request("https://neclor.ru/Records?name=%s&score=%d" % [player_name.uri_encode(), score], \
-				[], HTTPClient.METHOD_POST, '{}')
-
-func parse_http_headers(headers: Array) -> Dictionary:
-	var result = {}
-	for header in headers:
-		var parts = header.split(":")
-		if parts.size() >= 2:
-			result[parts[0].strip_edges()] = parts[1]
-	return result
-
-func http_request_completed(result, response_code, headers, body):
-	match response_code:
-		200:
-			start_game()
-
-		304:
-			$GameOverField/RecordField/ErrorField/ErrorPanel/Error.text = "This name is\nalready taken!"
-			$GameOverField/RecordField/ErrorField.visible = true
-
-		_:
-			$GameOverField/RecordField/ErrorField/ErrorPanel/Error.text = parse_http_headers(headers)['x-message']
-			$GameOverField/RecordField/ErrorField/ErrorPanel/EnterAnotherName.visible = false
-			$GameOverField/RecordField/ErrorField.visible = true
-
 #Сontrol functions
 
 var used_button
@@ -405,20 +284,6 @@ func _on_pause_button_button_down():
 func _on_sound_button_button_down():
 	used_button = true
 	pause_music()
-
-func _on_info_button_button_down():
-	used_button = true
-	info()
-
-func _on_accept_name_button_down():
-	player_name = $GameOverField/RecordField/InputName.text
-	add_record()
-
-func _on_enter_another_name_button_down():
-	$GameOverField/RecordField/ErrorField.visible = false
-
-func _on_save_name_button_down():
-	start_game()
 
 func _input(event):
 	if Input.is_action_just_pressed("Pause"):
@@ -460,7 +325,7 @@ func _input(event):
 				fall_check = true
 
 			if event is InputEventScreenDrag:
-				if event.velocity.y >= 2000:
+				if event.velocity.y >= 1500:
 					if fall_check:
 						figure.move_fall(locked_blocks)
 						_on_game_timer_timeout()
