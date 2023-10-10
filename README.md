@@ -1,6 +1,4 @@
 # Netris
-Play online: [neclor.ru](https://neclor.ru/)
-
 Tetris-like game that I made with Godot 4.0 and GDScript.
 
 ## Overview
