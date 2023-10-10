@@ -1,6 +1,2 @@
-# Netris_old
-Tetris-like game that I made with Godot and GDScript.
-
-## Install
-- Download Godot4
-- Specify the path to the game folder
+# Tetris-Old
+Tetris-like game that I made with Godot 4.0 and GDScript.
